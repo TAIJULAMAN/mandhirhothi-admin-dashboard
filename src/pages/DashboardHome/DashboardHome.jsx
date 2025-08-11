@@ -1,0 +1,87 @@
+import React from "react";
+import GrowthChart from "../../Components/charts/UserGrowthChart";
+import ActivityChart from "../../Components/charts/ActivityChart";
+// import Loader from "../../Components/Shared/Loaders/Loader";
+import RecentlyJoinedUsers from "../User/RecentlyJoinedUsers";
+// import { useGetAllDashboardQuery } from "../../redux/api/dashboard";
+import user from "../../assets/icons/user.png";
+import list from "../../assets/icons/list.png";
+import category from "../../assets/icons/category.png";
+
+function DashboardHome() {
+  // const { data: dashboardData, isLoading } = useGetAllDashboardQuery();
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
+  // const cardData = [
+  //   {
+  //     title: "Total Users",
+  //     value: isLoading ? <Loader /> : dashboardData?.user || 110,
+  //     icon: <img src={user} alt="Driver Icon" />,
+  //   },
+  //   {
+  //     title: "Total Listings",
+  //     value: isLoading ? <Loader /> : dashboardData?.active_listing || 20,
+  //     icon: <img src={list} alt="User Icon" />,
+  //   },
+  //   {
+  //     title: "Categories",
+  //     value: isLoading ? <Loader /> : dashboardData?.category || 30,
+  //     icon: <img src={category} alt="Car Icon" />,
+  //   },
+  // ];
+  const cardData = [
+    {
+      title: "Total Users",
+      value: 110,
+      icon: <img src={user} alt="Driver Icon" />,
+    },
+    {
+      title: "Total Listings",
+      value: 20,
+      icon: <img src={list} alt="User Icon" />,
+    }
+
+  ];
+
+  return (
+    <div>
+      {/* Card Section */}
+      <div className="flex items-center justify-between  p-10 ounded-xl bg-white shadow-lg rounded-xl mb-5"> 
+        {cardData.map((card, index) => (
+          <div
+            className={`w-full ${index !== cardData.length - 1
+                ? "border-r-2 border-gray-800 pr-6"
+                : "pl-6"
+              }`}
+            key={index}
+          >
+            <div className="flex items-center justify-center gap-3">
+              <h1>{card.icon}</h1>
+              <div>
+                <h1 className="text-3xl font-semibold">{card.title}</h1>
+                <h1 className="text-3xl font-semibold text-[#00823b]">
+                  {card.value}
+                </h1>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Chart Section */}
+      <div className="w-full col-span-4 xl:col-span-3 h-full">
+        <GrowthChart />
+      </div>
+
+
+      {/* Recently Joined Users Section */}
+      <div className="mt-5">
+        <h1 className="text-2xl font-semibold mb-5">Recently Joined Users</h1>
+        <RecentlyJoinedUsers />
+      </div>
+    </div>
+  );
+}
+
+export default DashboardHome;
