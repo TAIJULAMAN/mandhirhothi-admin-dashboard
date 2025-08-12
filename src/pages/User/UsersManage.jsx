@@ -2,9 +2,14 @@ import React from "react";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { IoSearch } from "react-icons/io5";
 import AllUsers from "./AllUsers";
+import { useNavigate } from "react-router-dom";
 
 function UsersManage() {
   const [search, setSearch] = React.useState("");
+  const navigate = useNavigate();
+  const handleBlock = () => {
+    navigate("/blocked-user");
+  };
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
@@ -22,12 +27,12 @@ function UsersManage() {
             </span>
           </div>
           {/* <div className="text-white "> */}
-            <button
-              // onClick={handleBlock}
-              className="bg-[#00823b] !text-white font-semibold w-1/3 py-3 px-5 rounded-lg"
-            >
-              Blocked Users
-            </button>
+          <button
+            onClick={handleBlock}
+            className="bg-[#00823b] !text-white font-semibold w-1/3 py-3 px-5 rounded-lg"
+          >
+            Blocked Users
+          </button>
           {/* </div> */}
         </div>
       </div>

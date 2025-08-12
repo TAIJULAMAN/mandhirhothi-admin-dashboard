@@ -5,6 +5,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FaListUl } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
 import { LuChartNoAxesCombined, LuClipboardList, LuCrown } from "react-icons/lu";
+import { MdBlockFlipped } from "react-icons/md";
+import { IoIosNotificationsOutline } from "react-icons/io";
 import { PiMapPinArea } from "react-icons/pi";
 import { RiCoupon4Line, RiDashboard2Line, RiUserSettingsLine } from "react-icons/ri";
 import { TbMessageQuestion } from "react-icons/tb";
@@ -80,4 +82,10 @@ export const SidebarLink = [
     label: "About Us",
     icon: <CiCircleQuestion size={24} />,
   },
+  {
+    path: "/blocked-user",
+    label: "Blocked User",
+    icon: <MdBlockFlipped size={24} />,
+  },
+ 
 ];

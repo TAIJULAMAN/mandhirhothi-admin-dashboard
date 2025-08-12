@@ -23,6 +23,8 @@ import Coupon from '../pages/Coupon/Coupon';
 import AllSubscriber from '../pages/AllSubscriber/AllSubscriber';
 import EditListing from '../pages/Listings/EditListing';
 import AboutUs from '../pages/AboutUs/AboutUs';
+import BlockedUser from '../pages/User/BlockedUser';
+import Notifications from '../pages/Notifications/Notifications';
 
 
 export const Routes = createBrowserRouter([
@@ -108,6 +110,14 @@ export const Routes = createBrowserRouter([
       {
         path: '/faq-management',
         element: <Faq />,
+      },
+      {
+        path: '/blocked-user',
+        element: <BlockedUser />,
+      },
+      {
+        path: '/notifications',
+        element: <Notifications />,
       },
     ],
   },
