@@ -11,7 +11,7 @@ function UsersManage() {
     navigate("/blocked-user");
   };
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between mb-5">
         <PageHeading title="Users Management" />
         <div className="flex gap-5">
@@ -38,7 +38,7 @@ function UsersManage() {
       </div>
 
       <AllUsers search={search} />
-    </div>
+    </>
   );
 }
 

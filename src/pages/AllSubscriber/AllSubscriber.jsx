@@ -11,7 +11,7 @@ import { IoSearch } from "react-icons/io5";
 const AllUsers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
+    // const [selectedUser, setSelectedUser] = useState(null);
     const [page, setPage] = useState(1);
 
     // Demo users data
@@ -349,15 +349,15 @@ const AllUsers = () => {
     ];
 
 
-    const showModal = (user) => {
-        setSelectedUser(user);
-        setIsModalOpen(true);
-    };
+    // const showModal = (user) => {
+    //     setSelectedUser(user);
+    //     setIsModalOpen(true);
+    // };
 
-    const showModal2 = (user) => {
-        setSelectedUser(user);
-        setIsModalOpen2(true);
-    };
+    // const showModal2 = (user) => {
+    //     setSelectedUser(user);
+    //     setIsModalOpen2(true);
+    // };
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -367,12 +367,12 @@ const AllUsers = () => {
         setIsModalOpen2(false);
     };
 
-    const handleBlock = async () => {
-        if (selectedUser) {
-            // In demo mode, just close the modal
-            setIsModalOpen(false);
-        }
-    };
+    // const handleBlock = async () => {
+    //     // if (selectedUser) {
+    //     //     // In demo mode, just close the modal
+    //     //     setIsModalOpen(false);
+    //     // }
+    // };
 
     const columns = [
         {
@@ -417,7 +417,7 @@ const AllUsers = () => {
                 <div className="flex gap-5">
                     <div className="relative w-full sm:w-[300px] ">
                         <input
-                            onChange={(e) => setSearch(e.target.value)}
+                            // onChange={(e) => setSearch(e.target.value)}
                             type="text"
                             placeholder="Search..."
                             className="border-2 border-[#00823b] py-3 pl-12 pr-[65px] outline-none w-full rounded-md"
@@ -428,7 +428,7 @@ const AllUsers = () => {
                     </div>
                     {/* <div className="text-white "> */}
                     <button
-                        onClick={handleBlock}
+                        // onClick={handleBlock}
                         className="bg-[#00823b] !text-white font-semibold w-1/3 py-3 px-5 rounded-lg"
                     >
                         Manages Fees
@@ -488,7 +488,7 @@ const AllUsers = () => {
                                 Cancel
                             </button>
                             <button
-                                onClick={handleBlock}
+                                // onClick={handleBlock}
                                 className="bg-[#00823b] !text-white font-semibold w-1/3 py-3 px-5 rounded-lg"
                             >
                                 Confirm

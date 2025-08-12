@@ -2,14 +2,25 @@ import React from "react";
 import { BiCategory } from "react-icons/bi";
 import { CiCircleQuestion } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
-import { FaListUl } from "react-icons/fa6";
+
 import { GoChecklist } from "react-icons/go";
-import { LuChartNoAxesCombined, LuClipboardList, LuCrown } from "react-icons/lu";
-import { MdBlockFlipped } from "react-icons/md";
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { PiMapPinArea } from "react-icons/pi";
-import { RiCoupon4Line, RiDashboard2Line, RiUserSettingsLine } from "react-icons/ri";
+import { ImInfo } from "react-icons/im";
+import {
+  LuChartNoAxesCombined,
+  LuClipboardList,
+  LuCrown,
+  LuNotebookPen,
+} from "react-icons/lu";
+import { MdBlockFlipped, MdOutlineReportProblem } from "react-icons/md";
+import { IoIosNotificationsOutline, IoMdSettings } from "react-icons/io";
+import {
+  RiCoupon4Line,
+  RiDashboard2Line,
+  RiUserSettingsLine,
+} from "react-icons/ri";
 import { TbMessageQuestion } from "react-icons/tb";
+import { GrUserSettings } from "react-icons/gr";
+
 
 export const SidebarLink = [
   {
@@ -23,44 +34,35 @@ export const SidebarLink = [
     icon: <FaRegUserCircle size={24} />,
   },
   {
-    path: "/listing-management",
-    label: "Listings",
-    icon: <LuClipboardList size={24} />,
-  },
-  {
-    path: "/subscription",
-    label: "Subscription ",
-    icon: <LuCrown size={24} />,
-  },
-  {
-    path: "/all-subscriber",
-    label: "All Subscriber",
-    icon: <FaListUl size={24} />,
-  },
-  {
     path: "/earnings-management",
     label: "Earnings",
     icon: <LuChartNoAxesCombined size={24} />,
   },
   {
-    path: "/NDA",
-    label: "NDA",
-    icon: <PiMapPinArea size={24} />,
+    path: "/all-subscriber",
+    label: "Subscriptions",
+    icon: <LuCrown size={24} />,
   },
   {
-    path: "/coupon",
-    label: "Coupon",
-    icon: <RiCoupon4Line size={24} />,
+    path: "/blogs",
+    label: "Blogs ",
+    icon: <LuNotebookPen size={24} />,
   },
   {
-    path: "/categories",
-    label: "Formation",
-    icon: <BiCategory size={24} />,
+    path: "/create-admin",
+    label: "Create Admin",
+    icon: <GrUserSettings size={24} />,
   },
+  {
+    path: "/reports",
+    label: "Report",
+    icon: <MdOutlineReportProblem size={24} />,
+  },
+
   {
     path: "/profile",
     label: "Profile Setting",
-    icon: <RiUserSettingsLine size={24} />,
+    icon: <IoMdSettings size={24} />,
   },
   {
     path: "/faq-management",
@@ -80,12 +82,6 @@ export const SidebarLink = [
   {
     path: "/about-us",
     label: "About Us",
-    icon: <CiCircleQuestion size={24} />,
+    icon: <ImInfo size={24} />,
   },
-  {
-    path: "/blocked-user",
-    label: "Blocked User",
-    icon: <MdBlockFlipped size={24} />,
-  },
- 
 ];
