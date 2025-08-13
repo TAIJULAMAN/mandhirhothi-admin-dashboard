@@ -59,7 +59,7 @@ function EditProfile() {
           };
 
           return (
-                    <div className="bg-white px-20 w-[715px] py-5 rounded-md">
+                    <div className="bg-white md:px-20 px-5 md:w-[715px] py-5 rounded-md">
                               <p className="text-gray-800 text-center font-bold text-2xl mb-5">
                                         Edit Your Profile
                               </p>

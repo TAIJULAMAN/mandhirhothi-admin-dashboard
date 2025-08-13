@@ -59,8 +59,8 @@ function DashboardHome() {
             <div className="flex items-center justify-center gap-3">
               <h1>{card.icon}</h1>
               <div>
-                <h1 className="text-3xl font-semibold">{card.title}</h1>
-                <h1 className="text-3xl font-semibold text-[#00823b]">
+                <h1 className="md:text-3xl font-semibold">{card.title}</h1>
+                <h1 className="md:text-3xl font-semibold text-[#00823b]">
                   {card.value}
                 </h1>
               </div>

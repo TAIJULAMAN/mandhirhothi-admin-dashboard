@@ -8,20 +8,11 @@ import DashboardHome from "../pages/DashboardHome/DashboardHome";
 import UsersManage from "../pages/User/UsersManage";
 import EarningPage from "../pages/Earning/EarningPage";
 import VerificationCode from "../pages/Auth/Otp";
-import ListingsTab from "../pages/Listings/Listings";
-import Categories from "../pages/Categories/Categories";
 import Profile from "../pages/Profile/Profile";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import TermsCondition from "../pages/TermsCondition/TermsCondition";
 import Faq from "../pages/Faq/Faq";
-import BusinessInfo from "../pages/Categories/BussinessInfo";
-import AddFormation from "../pages/Categories/AddFormation";
-import MainSubscriptionPage from "../pages/Subscription/MainSubscriptionPage";
-import NDA from "../pages/NDA/NDA";
-import DocumentPage from "../pages/NDA/DocumentPage";
-import Coupon from "../pages/Coupon/Coupon";
 import AllSubscriber from "../pages/AllSubscriber/AllSubscriber";
-import EditListing from "../pages/Listings/EditListing";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import BlockedUser from "../pages/User/BlockedUser";
 import Notifications from "../pages/Notifications/Notifications";
@@ -47,18 +38,6 @@ export const Routes = createBrowserRouter([
         element: <UsersManage />,
       },
       {
-        path: "/listing-management",
-        element: <ListingsTab />,
-      },
-      {
-        path: "/edit-listing-management",
-        element: <EditListing />,
-      },
-      {
-        path: "/subscription",
-        element: <MainSubscriptionPage />,
-      },
-      {
         path: "/blogs",
         element: <Blogs />,
       },
@@ -79,32 +58,6 @@ export const Routes = createBrowserRouter([
         element: <EarningPage />,
       },
       {
-        path: "/categories",
-        element: <Categories />,
-      },
-      {
-        path: "/categories/:id",
-        element: <BusinessInfo />,
-      },
-      {
-        path: "/categories/add",
-        element: <AddFormation />,
-      },
-
-      {
-        path: "/NDA",
-        element: <NDA />,
-      },
-      {
-        path: "/document",
-        element: <DocumentPage />,
-      },
-      {
-        path: "/coupon",
-        element: <Coupon />,
-      },
-
-      {
         path: "/terms-condition",
         element: <TermsCondition />,
       },
@@ -116,7 +69,6 @@ export const Routes = createBrowserRouter([
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
       },
-
       {
         path: "/profile",
         element: <Profile />,

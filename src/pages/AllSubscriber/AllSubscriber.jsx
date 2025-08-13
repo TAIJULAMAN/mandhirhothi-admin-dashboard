@@ -414,7 +414,7 @@ const AllUsers = () => {
         <>
             <div className="flex items-center justify-between mb-5">
                 <PageHeading title="Users Management" />
-                <div className="flex gap-5">
+                <div className="flex gap-5 flex-col md:flex-row">
                     <div className="relative w-full sm:w-[300px] ">
                         <input
                             // onChange={(e) => setSearch(e.target.value)}
@@ -429,7 +429,7 @@ const AllUsers = () => {
                     {/* <div className="text-white "> */}
                     <button
                         // onClick={handleBlock}
-                        className="bg-[#00823b] !text-white font-semibold w-1/3 py-3 px-5 rounded-lg"
+                        className="bg-[#00823b] !text-white font-semibold md:w-1/3 w-full py-3 px-5 rounded-lg"
                     >
                         Manages Fees
                     </button>

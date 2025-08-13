@@ -1,54 +1,48 @@
+// Header.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-// import logo from "../../assets/icons/logo.png";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { imageUrl } from "../../Utils/server";
 import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
-import { IoIosNotificationsOutline } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
 
-
-
-function Header() {
-  const [isOpen, setIsOpen] = useState(true);
-
+function Header({ toggleSidebar,isSidebarOpen }) {
+  const [isOpen] = useState(true);
   const token = localStorage.getItem("token");
-  // console.log(token);
   const decodedToken = decodeAuthToken(token);
-  // console.log(decodedToken);
   const { data: profileData } = useGetProfileQuery({ _id: decodedToken?.id });
-  // console.log("profileData from header", profileData);
   const navigate = useNavigate();
-  const showModal = () => {
-    navigate("/notifications")
-  }
-
+  const showModal = () => navigate("/notifications");
 
   if (!isOpen) return null;
 
   return (
-    <div className="px-10 h-20 flex justify-between items-center bg-white shadow">
+    <div className="px-5 md:px-10 h-16 flex justify-between items-center bg-white shadow">
+      <div className="flex items-center gap-4">
+        
 
-      <img className="h-12" src='/logo.png' alt="logo image" />
+        <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
+      </div>
 
       <div className="flex items-center gap-5">
         {/* Notifications */}
         <button
           onClick={showModal}
-          className="relative bg-[#cce9ff] p-[15px] rounded-full transition"
+          className="relative bg-[#cce9ff] md:p-[13px] p-[10px] rounded-full transition"
         >
-          <IoIosNotificationsOutline size={22} />
-
+          <IoIosNotificationsOutline className="size-6" />
           <span className="absolute top-1 right-1 bg-[#00823b] text-xs text-white px-1 rounded-full">
             10
           </span>
-
         </button>
 
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
           <img
             src={imageUrl(profileData?.data?.img || "https://avatar.iran.liara.run/public/26")}
-            className="w-8 md:w-12 h-8 md:h-12 object-cover rounded-full"
+            className="md:size-12 size-10 object-cover rounded-full"
             alt="User Avatar"
           />
           <div className="hidden md:flex flex-col items-start">
@@ -58,9 +52,18 @@ function Header() {
             </p>
           </div>
         </Link>
+
+        {/* Hamburger Button */}
+        <button
+          onClick={toggleSidebar}
+          className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 md:hidden cursor-pointer"
+        >
+          {isSidebarOpen ?  <RxCross1 size={20} /> : <GiHamburgerMenu size={20} /> }
+          
+        </button>
+
+
       </div>
-
-
     </div>
   );
 }

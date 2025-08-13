@@ -43,7 +43,7 @@ function Profile() {
 
         <div className="mx-auto flex flex-col justify-center items-center">
           {/* Profile Picture Section */}
-          <div className="flex flex-col justify-center items-center mt-5 w-[900px] mx-auto p-5 gap-5 rounded-lg">
+          <div className="flex flex-col justify-center items-center mt-5 md:w-[900px] mx-auto p-5 gap-5 rounded-lg">
             <div className="relative">
               <div className="w-[122px] h-[122px] bg-gray-300 rounded-full border-4 border-white shadow-xl flex justify-center items-center">
                 <img
@@ -89,7 +89,7 @@ function Profile() {
           </div>
 
           {/* Tab Content Section */}
-          <div className="flex justify-center items-center p-5 rounded-md">
+          <div className="flex justify-center items-center p-5 rounded-md !w-full">
             <div className="w-full max-w-3xl">
               {activeTab === "editProfile" && <EditProfile />}
               {activeTab === "changePassword" && <ChangePassword />}
