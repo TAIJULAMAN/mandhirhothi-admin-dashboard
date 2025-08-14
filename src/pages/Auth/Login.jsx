@@ -1,14 +1,15 @@
-import React from "react";
-
 import { useState } from "react";
 import "antd/dist/reset.css";
 import { Link, useNavigate } from "react-router";
 import BrandLogo from "../../Components/Shared/BrandLogo";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-// import Swal from "sweetalert2";
-import { useLogInMutation } from "../../redux/api/authApi";
-// import { setUser } from "../../redux/Slice/authSlice";
+
 import { useDispatch } from "react-redux";
+import { useLogInMutation } from "../../redux/api/authApi";
+import Swal from "sweetalert2";
+import { setUser } from "../../redux/Slice/authSlice";
+import ErrorPage from "../../Components/Shared/Error/ErrorPage";
+import Loader from "../../Components/Shared/Loaders/Loader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,56 +17,60 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const [logIn] = useLogInMutation();
+  const dispatch = useDispatch();
+  const [logIn, { isLoading, error }] = useLogInMutation();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     navigate("/");
-    // if (!email || !password) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: !email ? "Email is required!" : "Password is required!",
-    //   });
-    //   return;
-    // }
-    // const loginData = { email, password };
+    if (!email || !password) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: !email ? "Email is required!" : "Password is required!",
+      });
+      return;
+    }
+    const loginData = { email, password };
 
-    // try {
-    //   const response = await logIn(loginData).unwrap();
-    //   if (response?.token) {
+    try {
+      const response = await logIn(loginData).unwrap();
 
-    //     dispatch(
-    //       setUser({
-    //         user: response || {},
-    //         token: response?.token,
-    //       })
-    //     );
-    //     localStorage.setItem("token", response?.token);
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: "Login successful!",
-    //       text: "You are now logged in.",
-    //     });
-    //     navigate("/");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Login Failed",
-    //     text: error?.data?.message || "Something went wrong!",
-    //   });
-    // }
+      if (response?.success && response?.data?.accessToken) {
+        localStorage.setItem("token", response?.data?.accessToken);
+        dispatch(
+          setUser({
+            user: response?.data || {},
+            token: response?.data?.accessToken,
+          })
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Login successful!",
+          text: "You are now logged in.",
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      if (error) {
+        return <ErrorPage message={error?.message} />;
+      }
+    }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!error) {
+    return <ErrorPage message={error?.message} />;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f0f6ff] p-5">
       <div className="bg-white shadow-lg relative rounded-2xl px-5 py-20 w-full max-w-xl text-center">
-        <BrandLogo
-          img="/logo.png"
-        />
+        <BrandLogo img="/logo.png" />
         <form onSubmit={handleSignIn} className="space-y-5">
           <div className="w-full">
             <label className="text-xl text-gray-800 mb-2 flex justify-start text-start">
@@ -168,10 +173,7 @@ const Login = () => {
 
               <span className="text-xl text-gray-600">Remember Password</span>
             </label>
-            <Link
-              to="/forgot-password"
-              className="text-[#00823b] text-xl"
-            >
+            <Link to="/forgot-password" className="text-[#00823b] text-xl">
               Forgot Password?
             </Link>
           </div>

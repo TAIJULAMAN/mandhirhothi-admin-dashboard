@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router";
+import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import { SidebarLink } from "../../Utils/Sideber/SidebarLink.jsx";
 import { RiLogoutBoxLine } from "react-icons/ri";
 
@@ -7,6 +7,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const location = useLocation();
   // const [setting_active, set_setting_active] = useState(false);
   const ref = useRef(null);
+  const naviagate = useNavigate();
 
   // useEffect(() => {
   //   if (!ref.current) return;
@@ -16,6 +17,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   //     set_setting_active(false);
   //   }
   // }, [ref, location.pathname]);
+
+  const handleLogOut = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      localStorage.removeItem("token");
+      naviagate("/login");
+    }
+  };
 
   return (
     <>
@@ -31,7 +40,9 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       <div
         ref={ref}
         className={`fixed md:static top-0 left-0 h-full md:h-auto bg-white px-4 pb-10 flex flex-col gap-3 z-50 transition-transform duration-300
-          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 
+          ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 
           w-[250px] md:w-full`}
       >
         {SidebarLink?.map((item) => (
@@ -60,12 +71,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
         {/* Logout Button */}
         <div className="mt-10 w-full px-5 text-white">
-          <Link to="/login">
-            <button className="flex items-center gap-4 w-full py-3 rounded-lg bg-[#00823b] justify-center">
-              <RiLogoutBoxLine className="w-5 h-5 font-bold" />
-              <span>Logout</span>
-            </button>
-          </Link>
+          <button
+            onClick={handleLogOut}
+            className="flex items-center gap-4 w-full py-3 rounded-lg bg-[#00823b] justify-center"
+          >
+            <RiLogoutBoxLine className="w-5 h-5 font-bold" />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
     </>

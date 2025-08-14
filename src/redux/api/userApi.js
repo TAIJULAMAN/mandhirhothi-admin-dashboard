@@ -4,7 +4,7 @@ export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUser: builder.query({
       query: (params) => ({
-        url: "auth/get-all",
+        url: "auth/find_by_admin_all_users",
         method: "GET",
         params: {
           ...params,
@@ -29,8 +29,20 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
-
+    changeStatus: builder.mutation({
+      query: (data) => ({
+        url: `auth/change_status/${data?.id}`,
+        method: "PATCH",
+        body: data.status,
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
-export const { useGetAllUserQuery, useUpdateUserMutation, useGetSingleUserQuery } = userApi;
+export const {
+  useGetAllUserQuery,
+  useUpdateUserMutation,
+  useGetSingleUserQuery,
+  useChangeStatusMutation,
+} = userApi;

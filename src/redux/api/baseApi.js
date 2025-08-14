@@ -27,6 +27,7 @@ export const baseApi = createApi({
     "profile",
     "location",
     "city",
-    "categories"
+    "categories",
+    "auth"
   ],
 });

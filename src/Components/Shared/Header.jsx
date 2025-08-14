@@ -8,21 +8,24 @@ import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
 import { RxCross1 } from "react-icons/rx";
 
-function Header({ toggleSidebar,isSidebarOpen }) {
+function Header({ toggleSidebar, isSidebarOpen }) {
   const [isOpen] = useState(true);
   const token = localStorage.getItem("token");
   const decodedToken = decodeAuthToken(token);
+
   const { data: profileData } = useGetProfileQuery({ _id: decodedToken?.id });
+
   const navigate = useNavigate();
   const showModal = () => navigate("/notifications");
 
   if (!isOpen) return null;
 
+
+
+
   return (
     <div className="px-5 md:px-10 h-16 flex justify-between items-center bg-white shadow">
       <div className="flex items-center gap-4">
-        
-
         <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
       </div>
 
@@ -41,14 +44,20 @@ function Header({ toggleSidebar,isSidebarOpen }) {
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
           <img
-            src={imageUrl(profileData?.data?.img || "https://avatar.iran.liara.run/public/26")}
+            src={imageUrl(
+              profileData?.data?.photo
+                ? `${import.meta.env.VITE_API_URL}/${profileData.data.photo}`
+                : ""
+            )}
             className="md:size-12 size-10 object-cover rounded-full"
             alt="User Avatar"
           />
           <div className="hidden md:flex flex-col items-start">
-            <h3 className="text-gray-800 text-sm">{profileData?.data?.name || "Shah Aman"}</h3>
+            <h3 className="text-gray-800 text-sm">
+              {profileData?.data?.fastname}
+            </h3>
             <p className="text-xs px-2 py-1 bg-[#cce9ff] text-[#00823b] rounded">
-              {profileData?.data?.role || "Admin"}
+              {profileData?.data?.role ?? "Admin"}
             </p>
           </div>
         </Link>
@@ -58,11 +67,12 @@ function Header({ toggleSidebar,isSidebarOpen }) {
           onClick={toggleSidebar}
           className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 md:hidden cursor-pointer"
         >
-          {isSidebarOpen ?  <RxCross1 size={20} /> : <GiHamburgerMenu size={20} /> }
-          
+          {isSidebarOpen ? (
+            <RxCross1 size={20} />
+          ) : (
+            <GiHamburgerMenu size={20} />
+          )}
         </button>
-
-
       </div>
     </div>
   );

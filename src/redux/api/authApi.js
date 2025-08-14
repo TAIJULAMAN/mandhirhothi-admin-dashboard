@@ -4,9 +4,8 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     logIn: builder.mutation({
       query: (data) => {
-        console.log("Data being sent to the API:", data);
         return {
-          url: "auth/sign-in",
+          url: "auth/login_user",
           method: "POST",
           body: data,
         };
@@ -39,9 +38,16 @@ const authApi = baseApi.injectEndpoints({
 
       invalidatesTags: ["admin"],
     }),
+    
   }),
 });
 
-export const { useLogInMutation, useForgotPasswordMutation, useVerifyEmailMutation, useResetPasswordMutation } = authApi;
+export const {
+  useLogInMutation,
+  useForgotPasswordMutation,
+  useVerifyEmailMutation,
+  useResetPasswordMutation,
+
+} = authApi;
 
 export default authApi;
