@@ -19,6 +19,7 @@ import Notifications from "../pages/Notifications/Notifications";
 import Blogs from "../pages/Blogs/Blogs";
 import CreateAdmin from "../pages/CreateAdmin/CreateAdmin";
 import Reports from "../pages/Report/Reports";
+import PrivateRoute from "./PrivetRoute";
 
 export const Routes = createBrowserRouter([
   {
@@ -35,7 +36,11 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/user-management",
-        element: <UsersManage />,
+        element: (
+          <PrivateRoute>
+            <UsersManage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/blogs",

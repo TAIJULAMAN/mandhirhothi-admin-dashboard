@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { setUser } from "../../redux/Slice/authSlice";
 import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import Loader from "../../Components/Shared/Loaders/Loader";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -53,9 +54,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      if (error) {
-        return <ErrorPage message={error?.message} />;
-      }
+      toast.error(error?.message);
     }
   };
 
@@ -64,7 +63,7 @@ const Login = () => {
   }
 
   if (!error) {
-    return <ErrorPage message={error?.message} />;
+    // return <ErrorPage message={error?.message} />;
   }
 
   return (
