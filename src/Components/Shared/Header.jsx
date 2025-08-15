@@ -7,19 +7,26 @@ import { imageUrl } from "../../Utils/server";
 import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
 import { RxCross1 } from "react-icons/rx";
+import Loader from "./Loaders/Loader";
 
 function Header({ toggleSidebar, isSidebarOpen }) {
   const [isOpen] = useState(true);
   const token = localStorage.getItem("token");
   const decodedToken = decodeAuthToken(token);
 
-  const { data: profileData } = useGetProfileQuery({ _id: decodedToken?.id });
+  const { data: profileData, isLoading } = useGetProfileQuery({ _id: decodedToken?.id });
 
   const navigate = useNavigate();
   const showModal = () => navigate("/notifications");
 
   if (!isOpen) return null;
 
+if (isLoading) {
+  <Loader />;
+}
+
+// console.log("Profile Data:", profileData);
+// console.log(isLoading, "Loading State");
 
 
 

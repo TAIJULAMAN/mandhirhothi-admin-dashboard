@@ -23,7 +23,7 @@ const Login = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    navigate("/");
+    
     if (!email || !password) {
       Swal.fire({
         icon: "error",
@@ -54,7 +54,8 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error?.message);
+      // console.error("Login failed: error", error.data.message);
+      toast.error(` ${error?.data?.message || "Login failed!"}`);
     }
   };
 
