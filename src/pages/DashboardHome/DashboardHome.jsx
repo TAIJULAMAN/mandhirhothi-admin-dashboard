@@ -6,7 +6,7 @@ import RecentlyJoinedUsers from "../User/RecentlyJoinedUsers";
 // import { useGetAllDashboardQuery } from "../../redux/api/dashboard";
 import user from "../../assets/icons/user.png";
 import list from "../../assets/icons/list.png";
-import category from "../../assets/icons/category.png";
+// import category from "../../assets/icons/category.png";
 
 function DashboardHome() {
   // const { data: dashboardData, isLoading } = useGetAllDashboardQuery();

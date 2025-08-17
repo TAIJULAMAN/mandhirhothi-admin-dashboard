@@ -38,6 +38,7 @@ const Login = () => {
       const response = await logIn(loginData).unwrap();
 
       if (response?.success && response?.data?.accessToken) {
+        // console.log("Login successful:", response.data.accessToken);
         localStorage.setItem("token", response?.data?.accessToken);
         dispatch(
           setUser({

@@ -3,33 +3,79 @@ import React, { useState } from "react";
 import { Modal, Form, Input, DatePicker, Upload, Button, message } from "antd";
 import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { useCreateBlogMutation } from "../../redux/api/blogApi"; 
 
 const { TextArea } = Input;
 
-const CreateBlogModal = ({ isOpen, onClose, onSave }) => {
+const CreateBlogModal = ({ isOpen, onClose }) => {
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
 
-  const handleSave = async (values) => {
-    try {
-      const newBlog = {
-        id: Date.now().toString(), // Generate unique ID
-        "blog-title": values["blog-title"],
-        "blog-description": values["blog-description"],
-        author: values.author,
-        date: values.date.format('YYYY-MM-DD'),
-        "blog-image": imageUrl || "https://via.placeholder.com/400x300?text=No+Image",
-      };
-      
-      onSave(newBlog);
-      message.success('Blog created successfully!');
-      form.resetFields();
-      setImageUrl('');
-    } catch (error) {
-      message.error('Failed to create blog!', error.message);
+   const [file, setFile] = useState(null); // ✅ Store the uploaded file
+  const [createBlog, { isLoading }] = useCreateBlogMutation(); // ✅ Hook from RTK Query
+
+
+
+const handleSave = async (values) => {
+  try {
+    // Create FormData object for file upload
+    const formData = new FormData();
+    formData.append("blogTitle", values["blog-title"]);
+    formData.append("content", values["blog-description"]);
+    formData.append("author", values.author);
+    formData.append("date", values.date.format("YYYY-MM-DD"));
+
+    // Append actual image file, not just URL preview
+    if (file) {
+      formData.append("file", file);
     }
-  };
+
+    // Call API mutation
+    await createBlog(formData).unwrap();
+
+    message.success("Blog created successfully!");
+    form.resetFields();
+    setImageUrl("");
+    setFile(null);
+    onClose();
+  } catch (error) {
+    message.error(error?.data?.message || "Failed to create blog!");
+  }
+};
+
+
+
+const customUpload = ({ file, onSuccess, onError }) => {
+  setUploading(true);
+
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+    setUploading(false);
+    return onError(new Error('Invalid file type'));
+  }
+
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must be smaller than 2MB!');
+    setUploading(false);
+    return onError(new Error('File too large'));
+  }
+
+  try {
+    const objectUrl = URL.createObjectURL(file);
+    setImageUrl(objectUrl);
+    setFile(file); // ✅ Keep actual file for API upload
+    onSuccess({ url: objectUrl }, file);
+    setUploading(false);
+  } catch (error) {
+    message.error('Failed to process image');
+    onError(error);
+    setUploading(false);
+  }
+};
+
 
   const handleCancel = () => {
     form.resetFields();
@@ -37,41 +83,7 @@ const CreateBlogModal = ({ isOpen, onClose, onSave }) => {
     onClose();
   };
 
-  // Custom upload function that converts image to base64 or blob URL
-  const customUpload = ({ file, onSuccess, onError }) => {
-    setUploading(true);
-    
-    // Validate file type
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-      onError(new Error('Invalid file type'));
-      setUploading(false);
-      return;
-    }
 
-    // Validate file size
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must be smaller than 2MB!');
-      onError(new Error('File too large'));
-      setUploading(false);
-      return;
-    }
-
-    // Create object URL for preview (works locally)
-    try {
-      const objectUrl = URL.createObjectURL(file);
-      setImageUrl(objectUrl);
-      message.success(`${file.name} uploaded successfully`);
-      onSuccess({ url: objectUrl }, file);
-      setUploading(false);
-    } catch (error) {
-      message.error('Failed to process image');
-      onError(error);
-      setUploading(false);
-    }
-  };
 
   const uploadProps = {
     name: 'file',

@@ -4,12 +4,15 @@ import { getBaseUrl } from "../../config/envConfig";
 
 // Helper function to get the auth token
 export const baseApi = createApi({
-
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: getBaseUrl(),
-    headers: {
-      Authorization: localStorage.getItem("token"),
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers.set("Authorization", token);
+      }
+      return headers;
     },
   }),
   endpoints: () => ({}),
@@ -28,6 +31,7 @@ export const baseApi = createApi({
     "location",
     "city",
     "categories",
-    "auth"
+    "auth",
   ],
 });
+
