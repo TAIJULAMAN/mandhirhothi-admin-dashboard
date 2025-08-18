@@ -9,10 +9,11 @@ export const getBaseUrl = () => {
 export const getImageBaseUrl = () => {
   return url;
 };
-
+ 
 export const getImageUrl = (imagePath) => {
   if (imagePath.includes("http")) {
     return imagePath;
   }
+  
   return `${url}${imagePath}`;
 };
