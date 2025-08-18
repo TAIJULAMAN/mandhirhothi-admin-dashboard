@@ -1,4 +1,4 @@
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Select } from "antd";
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa6";
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -6,6 +6,15 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
 import Swal from "sweetalert2";
 import PageHeading from "../../Components/Shared/PageHeading";
+import {
+  useCreateFaqMutation,
+  useDeleteFaqMutation,
+  useGetAllFaqQuery,
+  useUpdateFaqMutation,
+} from "../../redux/api/faqApi";
+import Loader from "../../Components/Shared/Loaders/Loader";
+
+const { Option } = Select;
 
 const FAQ = () => {
   const [isAccordionOpen, setIsAccordionOpen] = useState(null);
@@ -13,34 +22,22 @@ const FAQ = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
+  const [createFaq] = useCreateFaqMutation();
+  const { data: faData, isLoading, isError } = useGetAllFaqQuery();
+  const [deleteFaq] = useDeleteFaqMutation();
+  const [updateFaq] = useUpdateFaqMutation();
 
-  const faqData = [
+  if (isLoading) return <Loader />;
+  if (isError) return <p>Failed to load FAQs.</p>;
 
-    {
-      question: "How do I find businesses for sale?",
-      answer: "You can browse our marketplace, use filters to narrow down your search, and contact sellers directly through our platform."
-    },
-    {
-      question: "What should I consider before buying a business?",
-      answer: "Consider factors like financial records, business valuation, market potential, and legal requirements. We recommend conducting due diligence."
-    },
-    {
-      question: "Can I get financing to buy a business?",
-      answer: "Yes, we partner with financial institutions to offer loan options. You can apply directly through our financing section."
-    },
-    {
-      question: "How long does the buying process usually take?",
-      answer: "Depending on the complexity, it can take from a few weeks to a few months. Due diligence and negotiations impact the timeline."
-    },
-    {
-      question: "Is there support available during the buying process?",
-      answer: "Yes, we offer buyer guides, consultation services, and legal templates to assist you every step of the way."
-    }
-  ]
+  const questionTypes = [
+    { value: "general", label: "General" },
+    { value: "buying", label: "Buying" },
+    { value: "selling", label: "Selling" },
+    { value: "valuation", label: "Valuation" },
+  ];
 
-
-
-
+  const faqData = faData?.data?.allFaqList || [];
 
   const handleClick = (index) => {
     setIsAccordionOpen((prevIndex) => (prevIndex === index ? null : index));
@@ -49,17 +46,22 @@ const FAQ = () => {
   const FAQAccordion = ({ faqs }) => (
     <div className="space-y-4">
       {faqs.map((faq, index) => (
-        <div key={index} className="border rounded-lg">
+        <div key={faq._id} className="border rounded-lg">
           <div
             className="flex items-center justify-between p-4 cursor-pointer"
             onClick={() => handleClick(index)}
           >
             <div className="flex items-center gap-2">
               <FaRegQuestionCircle className="text-primary" />
-              <h3 className="text-lg font-medium">{faq.question}</h3>
+              <div>
+                <h3 className="text-lg font-medium">{faq.question}</h3>
+                <span className="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                  {faq.question_type}
+                </span>
+              </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="bg-[#00823b] rounded  px-1.5 py-1">
+              <div className="bg-[#00823b] rounded px-1.5 py-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -69,7 +71,7 @@ const FAQ = () => {
                   <CiEdit className="text-xl text-white font-bold" />
                 </button>
               </div>
-              <div className="bg-[#FECACA] border border-[#EF4444] rounded  px-1.5 py-1">
+              <div className="bg-[#FECACA] border border-[#EF4444] rounded px-1.5 py-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -80,8 +82,9 @@ const FAQ = () => {
                 </button>
               </div>
               <FaChevronDown
-                className={`transition-transform duration-300 ${isAccordionOpen === index ? "rotate-180" : ""
-                  }`}
+                className={`transition-transform duration-300 ${
+                  isAccordionOpen === index ? "rotate-180" : ""
+                }`}
               />
             </div>
           </div>
@@ -95,38 +98,67 @@ const FAQ = () => {
     </div>
   );
 
-  const handleDeleteAdmin = (faq) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to delete this FAQ",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    });
-  };
+
+
+const handleDeleteAdmin = (faq) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to delete this FAQ",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteFaq(faq._id)
+        .unwrap()
+        .then(() => {
+          Swal.fire("Deleted!", "The FAQ has been deleted.", "success");
+        })
+        .catch(() => {
+          Swal.fire("Error!", "Something went wrong while deleting.", "error");
+        });
+    }
+  });
+};
+
 
   const handleAddFaq = async (values) => {
-    Swal.fire({
-      icon: "success",
-      title: "FAQ Added",
-      text: "New FAQ was added successfully!",
-    });
-    setIsAddModalVisible(false);
-    form.resetFields();
-  };
+    try {
+      await createFaq(values).unwrap(); // ✅ unwrap throws error if request fails
 
-  const handleOpenEditModal = (faq) => {
-    editForm.setFieldsValue({
-      _id: faq._id,
-      question: faq?.question,
-      answer: faq?.answer,
-    });
-    setIsEditModalVisible(true);
+      // only shows if API confirms success
+      Swal.fire({
+        icon: "success",
+        title: "FAQ Added",
+        text: "New FAQ was added successfully!",
+      });
+
+      setIsAddModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      // error handling
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Add FAQ",
+        text: error?.data?.message || "Something went wrong. Please try again.",
+      });
+    }
   };
 
   const handleEditFaq = async (values) => {
+    console.log(values);
+    try {
+      await updateFaq({ _id: values._id, data: values }).unwrap();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Update FAQ",
+        text: error?.data?.message || "Something went wrong. Please try again.",
+      });
+      return;
+    }
     Swal.fire({
       icon: "success",
       title: "FAQ Updated",
@@ -136,12 +168,21 @@ const FAQ = () => {
     editForm.resetFields();
   };
 
+  const handleOpenEditModal = (faq) => {
+    editForm.setFieldsValue({
+      _id: faq._id,
+      question: faq.question,
+      answer: faq.answer,
+      question_type: faq.question_type,
+    });
+    setIsEditModalVisible(true);
+  };
+
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-5">
         <PageHeading title="FAQ Management" />
         <button
-          // type="submit"
           onClick={() => setIsAddModalVisible(true)}
           className="bg-[#00823b] !text-white px-5 py-2 rounded"
         >
@@ -179,14 +220,13 @@ const FAQ = () => {
             >
               Save
             </button>
-          </div>
+          </div>,
         ]}
       >
         <div className="p-5">
           <h2 className="text-2xl font-bold text-center mb-2">Add FAQ</h2>
           <p className="text-center mb-6 text-gray-700">
-            Fill out the details below to add a new FAQ. Ensure the answer provides clarity and helps users quickly
-            resolve their queries.
+            Fill out the details below to add a new FAQ.
           </p>
           <Form
             requiredMark={false}
@@ -195,11 +235,29 @@ const FAQ = () => {
             layout="vertical"
           >
             <Form.Item
+              name="question_type"
+              label="Question Type"
+              rules={[
+                { required: true, message: "Please select question type" },
+              ]}
+            >
+              <Select placeholder="Select question type">
+                {questionTypes.map((type) => (
+                  <Option key={type.value} value={type.value}>
+                    {type.label}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
               name="question"
               label="Question"
               rules={[
-                { required: true, message: 'Please enter the question' },
-                { max: 200, message: 'Question cannot be longer than 200 characters' }
+                { required: true, message: "Please enter the question" },
+                {
+                  max: 200,
+                  message: "Question cannot be longer than 200 characters",
+                },
               ]}
             >
               <Input placeholder="Enter question" />
@@ -208,8 +266,11 @@ const FAQ = () => {
               name="answer"
               label="Answer"
               rules={[
-                { required: true, message: 'Please enter the answer' },
-                { max: 1000, message: 'Answer cannot be longer than 1000 characters' }
+                { required: true, message: "Please enter the answer" },
+                {
+                  max: 1000,
+                  message: "Answer cannot be longer than 1000 characters",
+                },
               ]}
             >
               <Input.TextArea rows={4} placeholder="Enter answer" />
@@ -243,14 +304,13 @@ const FAQ = () => {
             >
               Save
             </button>
-          </div>
+          </div>,
         ]}
       >
         <div className="p-5">
           <h2 className="text-2xl font-bold text-center mb-2">Edit FAQ</h2>
           <p className="text-center mb-6 text-gray-700">
-            Fill out the details below to edit the FAQ. Ensure the answer provides clarity and helps users quickly
-            resolve their queries.
+            Update the FAQ details below.
           </p>
           <Form
             requiredMark={false}
@@ -262,11 +322,29 @@ const FAQ = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              name="question_type"
+              label="Question Type"
+              rules={[
+                { required: true, message: "Please select question type" },
+              ]}
+            >
+              <Select placeholder="Select question type">
+                {questionTypes.map((type) => (
+                  <Option key={type.value} value={type.value}>
+                    {type.label}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
               name="question"
               label="Question"
               rules={[
-                { required: true, message: 'Please enter the question' },
-                { max: 200, message: 'Question cannot be longer than 200 characters' }
+                { required: true, message: "Please enter the question" },
+                {
+                  max: 200,
+                  message: "Question cannot be longer than 200 characters",
+                },
               ]}
             >
               <Input placeholder="Enter question" />
@@ -275,8 +353,11 @@ const FAQ = () => {
               name="answer"
               label="Answer"
               rules={[
-                { required: true, message: 'Please enter the answer' },
-                { max: 1000, message: 'Answer cannot be longer than 1000 characters' }
+                { required: true, message: "Please enter the answer" },
+                {
+                  max: 1000,
+                  message: "Answer cannot be longer than 1000 characters",
+                },
               ]}
             >
               <Input.TextArea rows={4} placeholder="Enter answer" />

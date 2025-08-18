@@ -54,7 +54,7 @@ const DeleteBlogModal = ({ isOpen, onClose, onConfirm }) => {
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 text-white font-semibold w-1/3 py-3 px-5 rounded-lg hover:bg-red-600 transition-colors"
+            className="bg-red-500 text-white font-semibold cursor-pointer w-1/3 py-3 px-5 rounded-lg hover:bg-red-600 transition-colors"
           >
             Delete
           </button>

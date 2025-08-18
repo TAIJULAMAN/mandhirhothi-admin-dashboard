@@ -51,11 +51,12 @@ if (isLoading) {
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
           <img
-            src={imageUrl(
-              profileData?.data?.photo
-                ? `${import.meta.env.VITE_API_URL}/${profileData.data.photo}`
-                : ""
-            )}
+          src="https://avatar.iran.liara.run/public/15"
+            // src={imageUrl(
+            //   profileData?.data?.photo
+            //     ? `${import.meta.env.VITE_API_URL}/${profileData.data.photo}`
+            //     : ""
+            // )}
             className="md:size-12 size-10 object-cover rounded-full"
             alt="User Avatar"
           />

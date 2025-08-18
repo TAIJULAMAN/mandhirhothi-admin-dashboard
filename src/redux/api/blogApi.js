@@ -34,7 +34,7 @@ export const blogApi = baseApi.injectEndpoints({
     // Optionally: update blog
     updateBlog: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `blogs/update_blogs/${id}`,
+        url: `blogs/update_blog/${id}`,
         method: "PATCH",
         body: formData,
       }),

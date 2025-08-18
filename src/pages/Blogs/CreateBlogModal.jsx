@@ -7,75 +7,84 @@ import { useCreateBlogMutation } from "../../redux/api/blogApi";
 
 const { TextArea } = Input;
 
+// Supported image types
+const SUPPORTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'image/bmp',
+  'image/tiff'
+];
+
 const CreateBlogModal = ({ isOpen, onClose }) => {
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState(null);
+  const [createBlog, { isLoading }] = useCreateBlogMutation();
 
-   const [file, setFile] = useState(null); // ✅ Store the uploaded file
-  const [createBlog, { isLoading }] = useCreateBlogMutation(); // ✅ Hook from RTK Query
+  const handleSave = async (values) => {
+    try {
+      console.log("Form values:", values); // Log form values
+      console.log("Image file:", file); // Log image file
 
+      const formData = new FormData();
+      formData.append("blogTitle", values["blog-title"]);
+      formData.append("content", values["blog-description"]);
+      formData.append("author", values.author);
+      formData.append("date", values.date.format("YYYY-MM-DD"));
 
+      if (file) {
+        formData.append("file", file);
+      }
 
-const handleSave = async (values) => {
-  try {
-    // Create FormData object for file upload
-    const formData = new FormData();
-    formData.append("blogTitle", values["blog-title"]);
-    formData.append("content", values["blog-description"]);
-    formData.append("author", values.author);
-    formData.append("date", values.date.format("YYYY-MM-DD"));
+      await createBlog(formData).unwrap();
 
-    // Append actual image file, not just URL preview
-    if (file) {
-      formData.append("file", file);
+      message.success("Blog created successfully!");
+      form.resetFields();
+      setImageUrl("");
+      setFile(null);
+      onClose();
+    } catch (error) {
+      console.error("Error creating blog:", error); // Log error
+      message.error(error?.data?.message || "Failed to create blog!");
+    }
+  };
+
+  const customUpload = ({ file, onSuccess, onError }) => {
+    setUploading(true);
+
+    // Check if file type is supported
+    const isSupportedType = SUPPORTED_IMAGE_TYPES.includes(file.type);
+    if (!isSupportedType) {
+      message.error('You can only upload image files (JPG, PNG, GIF, WEBP, SVG, BMP, TIFF)!');
+      setUploading(false);
+      return onError(new Error('Invalid file type'));
     }
 
-    // Call API mutation
-    await createBlog(formData).unwrap();
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must be smaller than 2MB!');
+      setUploading(false);
+      return onError(new Error('File too large'));
+    }
 
-    message.success("Blog created successfully!");
-    form.resetFields();
-    setImageUrl("");
-    setFile(null);
-    onClose();
-  } catch (error) {
-    message.error(error?.data?.message || "Failed to create blog!");
-  }
-};
-
-
-
-const customUpload = ({ file, onSuccess, onError }) => {
-  setUploading(true);
-
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-    setUploading(false);
-    return onError(new Error('Invalid file type'));
-  }
-
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must be smaller than 2MB!');
-    setUploading(false);
-    return onError(new Error('File too large'));
-  }
-
-  try {
-    const objectUrl = URL.createObjectURL(file);
-    setImageUrl(objectUrl);
-    setFile(file); // ✅ Keep actual file for API upload
-    onSuccess({ url: objectUrl }, file);
-    setUploading(false);
-  } catch (error) {
-    message.error('Failed to process image');
-    onError(error);
-    setUploading(false);
-  }
-};
-
+    try {
+      const objectUrl = URL.createObjectURL(file);
+      console.log("Generated object URL:", objectUrl); // Log the generated URL
+      setImageUrl(objectUrl);
+      setFile(file);
+      onSuccess({ url: objectUrl }, file);
+      setUploading(false);
+    } catch (error) {
+      console.error("Image processing error:", error); // Log processing error
+      message.error('Failed to process image');
+      onError(error);
+      setUploading(false);
+    }
+  };
 
   const handleCancel = () => {
     form.resetFields();
@@ -83,29 +92,29 @@ const customUpload = ({ file, onSuccess, onError }) => {
     onClose();
   };
 
+const uploadProps = {
+  name: "file",
+  customRequest: customUpload,
+  beforeUpload: (file) => {
+    // Generate local preview immediately
+    const objectUrl = URL.createObjectURL(file);
+    setImageUrl(objectUrl);
+    setFile(file);
+    return false; // prevent automatic upload
+  },
+  onRemove: () => {
+    if (imageUrl && imageUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(imageUrl);
+    }
+    setImageUrl("");
+    setFile(null);
+    return true;
+  },
+  maxCount: 1,
+  accept: ".jpg,.jpeg,.png,.gif,.webp,.svg,.bmp,.tiff",
+  showUploadList: false,
+};
 
-
-  const uploadProps = {
-    name: 'file',
-    customRequest: customUpload,
-    beforeUpload: () => false, // Prevent automatic upload since we're using customRequest
-    onChange: (info) => {
-      if (info.file.status === 'uploading') {
-        setUploading(true);
-      }
-    },
-    onRemove: () => {
-      // Clean up object URL to prevent memory leaks
-      if (imageUrl && imageUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(imageUrl);
-      }
-      setImageUrl('');
-      return true;
-    },
-    maxCount: 1,
-    accept: '.jpg,.jpeg,.png',
-    showUploadList: false, // We'll show our own preview
-  };
 
   return (
     <Modal
@@ -121,7 +130,7 @@ const customUpload = ({ file, onSuccess, onError }) => {
         onFinish={handleSave}
         className="mt-4"
         initialValues={{
-          date: moment(), // Set default date to today
+          date: moment(),
         }}
       >
         <Form.Item
@@ -135,11 +144,14 @@ const customUpload = ({ file, onSuccess, onError }) => {
                   <img 
                     src={imageUrl} 
                     alt="Blog preview" 
-                    className="w-32 h-32 object-cover rounded-lg border border-gray-200"
+                    className="w-full max-h-64 object-contain rounded-lg border border-gray-200"
+                    onLoad={() => console.log("Image loaded successfully")}
+                    onError={() => console.log("Image failed to load")}
                   />
                   <button
                     type="button"
                     onClick={() => {
+                      console.log("Removing image via button click");
                       if (imageUrl.startsWith('blob:')) {
                         URL.revokeObjectURL(imageUrl);
                       }
@@ -162,11 +174,12 @@ const customUpload = ({ file, onSuccess, onError }) => {
               </Button>
             </Upload>
             <p className="text-xs text-gray-500">
-              Supported formats: JPG, PNG. Max size: 2MB
+              Supported formats: JPG, PNG, GIF, WEBP, SVG, BMP, TIFF. Max size: 2MB
             </p>
           </div>
         </Form.Item>
 
+        {/* Rest of your form items remain the same */}
         <Form.Item
           label={<span className="font-semibold text-gray-700">Blog Title</span>}
           name="blog-title"
@@ -226,8 +239,9 @@ const customUpload = ({ file, onSuccess, onError }) => {
             <button
               type="submit"
               className="bg-[#00823b] !text-white font-semibold py-3 px-8 rounded-lg hover:bg-[#006d32] transition-colors"
+              disabled={uploading || isLoading}
             >
-              Create Blog
+              {isLoading ? 'Creating...' : 'Create Blog'}
             </button>
           </div>
         </Form.Item>
