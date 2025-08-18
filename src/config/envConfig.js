@@ -8,12 +8,13 @@ export const getBaseUrl = () => {
 // Function to get the image base URL
 export const getImageBaseUrl = () => {
   return url;
+  
 };
  
 export const getImageUrl = (imagePath) => {
   if (imagePath.includes("http")) {
     return imagePath;
   }
-  
+
   return `${url}${imagePath}`;
 };
