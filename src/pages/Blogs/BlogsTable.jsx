@@ -5,6 +5,7 @@ import EditBlogModal from "./EditBlogModal";
 import DeleteBlogModal from "./DeleteBlogModal";
 import {  useDeleteBlogMutation, useGetAllBlogsQuery } from "../../redux/api/blogApi";
 import Loader from "../../Components/Shared/Loaders/Loader";
+import { getImageBaseUrl } from "../../config/envConfig";
 
 const AllBlogs = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -51,7 +52,7 @@ const AllBlogs = () => {
         <div className="flex gap-4">
           <div className="flex-shrink-0">
             <img
-              src={`https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400`}
+              src={getImageBaseUrl() + record.photo}
               alt="Blog thumbnail"
               className="w-20 h-20 object-cover rounded-lg border border-gray-200"
               onError={(e) => {

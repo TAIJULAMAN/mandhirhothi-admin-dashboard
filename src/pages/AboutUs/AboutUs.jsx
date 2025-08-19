@@ -27,9 +27,9 @@ const AboutUs = () => {
   const handleSubmit = async () => {
     try {
       const requestData = {
-        aboutUs: content, // ✅ backend expects this key
+        aboutUs: content,
       };
-      console.log("requestData of aboutUs", requestData);
+      // console.log("requestData of aboutUs", requestData);
 
       const res = await updateAboutUs({ requestData }).unwrap();
       if (res?.success) {

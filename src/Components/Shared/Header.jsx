@@ -8,6 +8,7 @@ import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
 import { RxCross1 } from "react-icons/rx";
 import Loader from "./Loaders/Loader";
+import { getBaseUrl, getImageBaseUrl } from "../../config/envConfig";
 
 function Header({ toggleSidebar, isSidebarOpen }) {
   const [isOpen] = useState(true);
@@ -24,6 +25,8 @@ function Header({ toggleSidebar, isSidebarOpen }) {
 if (isLoading) {
   <Loader />;
 }
+
+const profileImage = getImageBaseUrl() + profileData?.data?.photo;
 
 // console.log("Profile Data:", profileData);
 // console.log(isLoading, "Loading State");
@@ -51,12 +54,8 @@ if (isLoading) {
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
           <img
-          src="https://avatar.iran.liara.run/public/15"
-            // src={imageUrl(
-            //   profileData?.data?.photo
-            //     ? `${import.meta.env.VITE_API_URL}/${profileData.data.photo}`
-            //     : ""
-            // )}
+          // src="https://avatar.iran.liara.run/public/15"
+            src={profileImage}
             className="md:size-12 size-10 object-cover rounded-full"
             alt="User Avatar"
           />
