@@ -1,6 +1,6 @@
 // Function to get the base API URL
 export const url =
-  "https://appearing-sunrise-compression-inspiration.trycloudflare.com/api/v1/";
+  "https://treated-fighting-grounds-boring.trycloudflare.com/api/v1/";
 export const getBaseUrl = () => {
   return url;
 };

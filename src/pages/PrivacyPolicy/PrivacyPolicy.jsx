@@ -1,63 +1,64 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
-// import toast from 'react-hot-toast';
-// import Loader from '../../Components/Shared/Loaders/Loader.jsx';
-// import { useGetPrivacyQuery, useUpdatePrivacyMutation } from '../../redux/api/privacyApi.js';
-import PageHeading from '../../Components/Shared/PageHeading.jsx';
-import JoditComponent from '../../Components/Shared/JoditComponent.jsx';
+import React, { useEffect, useState } from "react";
+import PageHeading from "../../Components/Shared/PageHeading.jsx";
+import JoditComponent from "../../Components/Shared/JoditComponent.jsx";
+import {
+  useGetPrivacyQuery,
+  useUpdatePrivacyMutation,
+} from "../../redux/api/privacyApi.js";
+import Loader from "../../Components/Shared/Loaders/Loader.jsx";
+import { message } from "antd";
 
 const PrivacyPolicy = () => {
-    const [content, setContent] = useState('this is privacy policy');
-    // const { data, isLoading } = useGetPrivacyQuery({});
-    // console.log(data);
-    // const [setDescription, { isLoading: isSubmitting }] =
-    //           useUpdatePrivacyMutation();
-    // useEffect(() => {
-    //           if (data?.data?.desc) {
-    //                     setContent(data?.data?.desc);
-    //           }
-    // }, [data]);
+  const [content, setContent] = useState("this is privacy policy");
 
-    // const updateTerms = async () => {
-    //           try {
-    //                     const requestData = {
-    //                               name: "privacy",
-    //                               desc: content
+  const { data, isLoading } = useGetPrivacyQuery();
+  const [updatePrivacy, { isLoading: isSubmitting }] =
+    useUpdatePrivacyMutation();
 
-    //                     };
-    //                     console.log("requestData of privacy", requestData);
+  const handleSubmit = async () => {
+    if (!content) {
+      message.error("Privacy policy content cannot be empty!");
+      return;
+    }
 
-    //                     const res = await setDescription({ requestData }).unwrap();
-    //                     if (res?.success) {
-    //                               toast.success(
-    //                                         res?.message || 'Privacy policy updated successfully !'
-    //                               );
-    //                     }
-    //           } catch (error) {
-    //                     console.log(error);
-    //           }
-    // };
+    const requestData = {
+      PrivacyPolicy: content, // ✅ backend expects this key
+    };
 
-    // if (isLoading) {
-    //           return (
-    //                     <Loader />
-    //           );
-    // }
+    try {
+      const res = await updatePrivacy({ requestData }).unwrap();
+      console.log("Response from updatePrivacy:", res);
 
-    return (
-        <>
+      if (res?.success) {
+        message.success(res?.message || "Privacy policy updated successfully!");
+      }
+    } catch (error) {
+      message.error(error?.data?.message || "Something went wrong!");
+      console.error(error);
+    }
+  };
 
-            <PageHeading title="Privacy Policy" />
-            <JoditComponent setContent={setContent} content={content} />
-            <button
-                // onClick={handleBlock}
-                className="bg-[#00823b] !text-white font-semibold w-full py-3 px-5 rounded-lg"
-            >
-                Submit
-            </button>
-        </>
-    );
+  useEffect(() => {
+    if (data?.data?.PrivacyPolicy) {
+      setContent(data.data.PrivacyPolicy);
+    }
+  }, [data]);
+
+  if (isLoading) return <Loader />;
+
+  return (
+    <>
+      <PageHeading title="Privacy Policy" />
+      <JoditComponent setContent={setContent} content={content} />
+      <button
+        onClick={handleSubmit}
+        disabled={isSubmitting}
+        className="bg-[#00823b] !text-white font-semibold w-full py-3 px-5 rounded-lg disabled:opacity-50 cursor-pointer"
+      >
+        {isSubmitting ? "Updating..." : "Submit"}
+      </button>
+    </>
+  );
 };
 
 export default PrivacyPolicy;

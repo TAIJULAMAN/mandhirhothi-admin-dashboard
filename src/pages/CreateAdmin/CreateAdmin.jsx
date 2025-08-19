@@ -1,10 +1,10 @@
 // CreateAdmin.jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Table, Modal, message, ConfigProvider } from "antd";
 import { MdDelete } from "react-icons/md";
-import PageHeading from '../../Components/Shared/PageHeading';
-import DeleteAdminModal from './DeleteAdminModal';
-import CreateAdminModal from './CreateAdminModal';
+import PageHeading from "../../Components/Shared/PageHeading";
+import DeleteAdminModal from "./DeleteAdminModal";
+import CreateAdminModal from "./CreateAdminModal";
 
 export default function CreateAdmin() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -17,224 +17,256 @@ export default function CreateAdmin() {
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "1",
       name: "John Smith",
       email: "john.smith@example.com",
       joinDate: "2024-01-15",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
     {
       id: "2",
       name: "Sarah Johnson",
       email: "sarah.johnson@example.com",
       joinDate: "2024-02-20",
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     },
   ]);
 
@@ -244,15 +276,15 @@ export default function CreateAdmin() {
   };
 
   const handleDeleteAdmin = () => {
-    setAdmins(admins.filter(admin => admin.id !== selectedAdmin.id));
+    setAdmins(admins.filter((admin) => admin.id !== selectedAdmin.id));
     setIsDeleteModalOpen(false);
-    message.success('Admin deleted successfully');
+    message.success("Admin deleted successfully");
   };
 
   const handleCreateAdmin = (newAdmin) => {
     setAdmins([...admins, newAdmin]);
     setIsCreateModalOpen(false);
-    message.success('Admin created successfully');
+    message.success("Admin created successfully");
   };
 
   const columns = [
@@ -261,8 +293,8 @@ export default function CreateAdmin() {
       key: "content",
       render: (_, record) => (
         <div className="flex gap-3 items-center">
-          <img 
-            src={record.profileImage} 
+          <img
+            src={record.profileImage}
             alt="Admin profile"
             className="w-12 h-12 object-cover rounded-full border-2 border-gray-200"
             onError={(e) => {
@@ -276,9 +308,9 @@ export default function CreateAdmin() {
         </div>
       ),
     },
-    { 
-      title: "Join Date", 
-      dataIndex: "joinDate", 
+    {
+      title: "Join Date",
+      dataIndex: "joinDate",
       key: "joinDate",
       width: 120,
     },
@@ -302,7 +334,7 @@ export default function CreateAdmin() {
     <>
       <div className="flex items-center justify-between mb-5">
         <PageHeading title="Admins" />
-        <button                    
+        <button
           onClick={() => setIsCreateModalOpen(true)}
           className="bg-[#00823b] !text-white font-semibold max-w-[200px] whitespace-nowrap py-3 px-5 rounded-lg"
         >
@@ -324,6 +356,7 @@ export default function CreateAdmin() {
           dataSource={admins}
           columns={columns}
           rowKey="id"
+          scroll={{ x: "max-content" }}
           pagination={{
             pageSize: 10,
             current: page,
