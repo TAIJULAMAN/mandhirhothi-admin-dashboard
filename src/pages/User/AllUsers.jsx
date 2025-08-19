@@ -272,7 +272,7 @@ const AllUsers = () => {
         {/* Search Bar */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2>
-          <div className="w-80">
+          <div className="md:w-80">
             {/* <Input
               placeholder="Search by name, email, or role..."
               prefix={<SearchOutlined className="text-gray-400" />}
