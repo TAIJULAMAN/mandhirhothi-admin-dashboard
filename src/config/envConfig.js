@@ -14,9 +14,10 @@ export const getImageBaseUrl = () => {
   return imageUrl;
 };
 
+// get up
 export const getImageUrl = (imagePath) => {
   if (imagePath.includes("http")) {
     return imagePath;
   }
-  return `${url}${imagePath}`;
+  return `${imageUrl}${imagePath}`;
 };

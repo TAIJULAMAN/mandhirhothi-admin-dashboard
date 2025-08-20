@@ -31,7 +31,7 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [file, setFile] = useState(null);
   const [updateBlog, { isLoading }] = useUpdateBlogMutation();
-  const [previewUrl, setPreviewUrl] = useState(null); // for new uploads
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     if (blogData && isOpen) {
@@ -45,14 +45,14 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
       // Clean up previous preview URL
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
       }
       
       // Reset states when opening modal
-      setPreviewUrl(null);
       setFile(null);
       setImageUrl(blogData.photo ? getImageBaseUrl() + blogData.photo : "");
     }
-  }, [blogData, isOpen, form, previewUrl]);
+  }, [blogData, isOpen, form]);
 
   const customUpload = async ({ file: uploadedFile, onSuccess, onError }) => {
     try {
@@ -63,11 +63,8 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
       if (!isLt2M) throw new Error("Image must be smaller than 2MB!");
 
       const objectUrl = URL.createObjectURL(uploadedFile);
-      setPreviewUrl(objectUrl); // 🔥 only previewUrl changes
+      setPreviewUrl(objectUrl);
       setFile(uploadedFile);
-
-      console.log("New uploaded file:", uploadedFile);
-      console.log("Preview URL:", objectUrl);
 
       onSuccess("Upload successful", uploadedFile);
     } catch (error) {
@@ -85,8 +82,6 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
   };
 
   const handleSave = async (values) => {
-    console.log("Form values:", values); // Log form values
-    console.log("Image file:", file); // Log image file
     try {
       const formData = new FormData();
       formData.append("blogTitle", values["blog-title"]);
@@ -134,7 +129,13 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
       ","
     ),
     showUploadList: false,
-    beforeUpload: () => false, // Prevent automatic upload
+    beforeUpload: (file) => {
+      // Generate local preview immediately
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      setFile(file);
+      return false; // prevent automatic upload
+    },
     customRequest: customUpload,
     onChange: ({ file: uploadedFile }) => {
       if (uploadedFile.status === "removed") {
@@ -163,7 +164,7 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
         onCancel={handleCancel}
         footer={null}
         width={700}
-        destroyOnHidden
+        destroyOnClose
       >
         <Form
           form={form}
@@ -179,11 +180,27 @@ const EditBlogModal = ({ isOpen, onClose, blogData }) => {
             <div className="space-y-3">
               {(previewUrl || imageUrl) && (
                 <div className="flex justify-center">
-                  <img
-                    src={previewUrl || imageUrl} // ✅ show new preview first, fallback to API image
-                    alt="Blog preview"
-                    className="w-full max-h-64 object-contain rounded-lg border border-gray-200"
-                  />
+                  <div className="relative">
+                    <img
+                      src={previewUrl || imageUrl}
+                      alt="Blog preview"
+                      className="w-full max-h-64 object-contain rounded-lg border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (previewUrl) {
+                          URL.revokeObjectURL(previewUrl);
+                        }
+                        setPreviewUrl(null);
+                        setImageUrl(blogData?.photo ? getImageBaseUrl() + blogData.photo : "");
+                        setFile(null);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
                 </div>
               )}
 

@@ -18,12 +18,12 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm,] = useState("");
 
   const { data, isLoading, error } = useGetAllUserQuery({
     page,
     limit,
-    searchTerm: searchTerm,
+    // searchTerm: searchTerm,
   });
 
   const [

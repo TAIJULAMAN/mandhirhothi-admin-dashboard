@@ -17,10 +17,10 @@ const profileApi = baseApi.injectEndpoints({
       providesTags: ["profile"],
     }),
     updateProfile: builder.mutation({
-      query: (file) => ({
-        url: "auth/update-profile",
+      query: (formData) => ({
+        url: "auth/update_my_profile",
         method: "PATCH",
-        body: file,
+        body: formData,
       }),
       invalidatesTags: ["profile"],
     }),
