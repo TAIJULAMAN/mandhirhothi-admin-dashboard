@@ -16,13 +16,23 @@ function VerificationCode() {
   // resend
   const [
     forgotPassword,
-    { isLoading: isResending, isSuccess: resendSuccess, isError: resendError, error: resendErr },
+    {
+      isLoading: isResending,
+      isSuccess: resendSuccess,
+      isError: resendError,
+      error: resendErr,
+    },
   ] = useForgotPasswordMutation();
 
   // verify
   const [
     verifyEmail,
-    { isLoading: isVerifying, isSuccess: verifySuccess, isError: verifyError, error: verifyErr },
+    {
+      isLoading: isVerifying,
+      isSuccess: verifySuccess,
+      isError: verifyError,
+      error: verifyErr,
+    },
   ] = useVerifyEmailMutation();
 
   // show toast for resend
@@ -51,7 +61,7 @@ function VerificationCode() {
         title: "Verification successful!",
         text: "Your email has been successfully verified.",
       });
-      
+
       navigate("/reset-password");
     }
     if (verifyError) {
@@ -86,7 +96,10 @@ function VerificationCode() {
       return;
     }
 
-    verifyEmail({ email, verificationCode: enteredCode });
+    const payload = { verificationCode: enteredCode }; // or verification_code
+    console.log("sending payload:", payload);
+
+    verifyEmail(payload);
   };
 
   const handleResend = () => {
