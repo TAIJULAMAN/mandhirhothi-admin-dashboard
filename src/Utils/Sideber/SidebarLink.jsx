@@ -53,11 +53,11 @@ export const SidebarLink = [
     label: "Create Admin",
     icon: <GrUserSettings size={24} />,
   },
-  {
-    path: "/reports",
-    label: "Report",
-    icon: <MdOutlineReportProblem size={24} />,
-  },
+  // {
+  //   path: "/reports",
+  //   label: "Report",
+  //   icon: <MdOutlineReportProblem size={24} />,
+  // },
 
   {
     path: "/profile",

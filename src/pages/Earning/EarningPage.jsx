@@ -1,6 +1,8 @@
 import React from "react";
 import TransactionTable from "./TransactionTable";
 import { useGetEarningsStatsQuery } from "../../redux/api/Earnings/statsApi";
+import PageHeading from "../../Components/Shared/PageHeading";
+import { IoSearch } from "react-icons/io5";
 
 function EarningPage() {
   const { data, isLoading } = useGetEarningsStatsQuery();
@@ -30,7 +32,28 @@ function EarningPage() {
 
   return (
     <div>
+
+
+      <div className="flex items-center justify-between mb-5">
+        <PageHeading title="Eargings" />
+        <div className="flex gap-5 flex-col md:flex-row">
+          <div className="relative w-full sm:w-[300px] ">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="border-2 border-[#00823b] py-3 pl-12 pr-[65px] outline-none w-full rounded-md"
+            />
+            <span className=" text-gray-400 absolute top-0 left-0 h-full px-5 flex items-center justify-center rounded-r-md cursor-pointer">
+              <IoSearch className="text-[1.3rem]" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+
       <div className="flex items-center justify-between  p-10 ounded-xl bg-white shadow-lg rounded-xl mb-5">
+
         {cardData?.map((card, index) => (
           <div
             className={`w-full ${
