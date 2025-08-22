@@ -15,7 +15,7 @@ function ChangePassword() {
     });
     // const { data: AdminProfileData } = useGetAdminProfileQuery()
     // console.log("admin profile data", AdminProfileData)
-    const [changeAdminPassword] = useChangeAdminPasswordMutation();
+    const [changeAdminPassword, {isLoading}] = useChangeAdminPasswordMutation();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -173,9 +173,9 @@ function ChangePassword() {
                         </button>
                     </div>
                 </div>
-                <div className="text-center py-5 text-white">
-                    <button className="bg-[#00823b] text-white font-semibold w-full py-3 rounded-md">
-                        Save Changes
+                <div className="text-center py-5 text-white"  disabled={isLoading}>
+                    <button className="bg-[#00823b] text-white font-semibold w-full py-3 rounded-md cursor-pointer">
+                        {isLoading ? "Updating..." : "Save Changes"}
                     </button>
                 </div>
             </form>
