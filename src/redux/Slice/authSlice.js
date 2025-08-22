@@ -13,10 +13,10 @@ export const authSlice = createSlice({
       console.log("authslice");
 
       const { user, token } = action.payload;
-     
+
       state.user = user;
       state.token = token;
-      // console.log("token", token);
+      console.log("token", token);
     },
     // logout: (state) => {
     //   state.user = null;

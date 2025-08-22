@@ -131,7 +131,6 @@ function EditProfile({ profileData, updateProfile, refetch, isLoading }) {
             type="text"
             name="phoneNumber"
             required
-            defaultValue={"01"}
             className="w-full px-5 py-3 border-2 border-[#6A6D76] rounded-md outline-none mt-2"
             placeholder="Enter Phone Number"
             value={formData.phoneNumber}

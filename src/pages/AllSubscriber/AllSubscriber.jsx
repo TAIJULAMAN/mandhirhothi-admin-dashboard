@@ -10,7 +10,7 @@ const AllUsers = () => {
   const [page, setPage] = useState(1);
 
   // Fetch subscriptions
-  const { data, isLoading, isError } = useGetAllSubscriptionQuery({
+  const { data, isLoading } = useGetAllSubscriptionQuery({
     page,
     limit: 10,
   });
@@ -120,7 +120,7 @@ const AllUsers = () => {
           rowKey="_id"
           scroll={{ x: "max-content" }}
           pagination={{
-            pageSize: 2,
+            pageSize: 10,
             total: data?.data?.meta?.total || 0,
             current: page,
             showSizeChanger: false,
