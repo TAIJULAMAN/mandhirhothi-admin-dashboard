@@ -11,6 +11,7 @@ import {
 import Loader from "../../Components/Shared/Loaders/Loader";
 import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import toast from "react-hot-toast";
+import { getImageUrl } from "../../config/envConfig";
 
 const AllUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,7 +131,7 @@ const AllUsers = () => {
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
-            src={record?.img}
+            src={getImageUrl(record?.img)}
             className="w-10 h-10 object-cover rounded-full"
             alt="User Avatar"
             onError={(e) => {
@@ -271,7 +272,7 @@ const AllUsers = () => {
       <div className="mb-4">
         {/* Search Bar */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2>
+          {/* <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2> */}
           <div className="md:w-80">
             {/* <Input
               placeholder="Search by name, email, or role..."
