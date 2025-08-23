@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useResetPasswordMutation } from "../../redux/api/authApi";
+import { jwtDecode } from "jwt-decode"; 
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -27,27 +28,52 @@ const ResetPassword = () => {
       return;
     }
 
-    const userId = localStorage.getItem("resetUserId"); 
-    if (!userId) {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
       Swal.fire({
         icon: "error",
         title: "Invalid Request",
-        text: "Missing reset user ID. Please restart the reset process.",
+        text: "Missing verification token. Please restart the reset process.",
       });
       return;
     }
 
+    // ✅ Decode token to get userId
+    let decoded;
     try {
-      await resetPassword({
-        userId,
-        password: newPassword,
-      }).unwrap();
+      decoded = jwtDecode(token);
+    } catch (error) {
+      Swal.fire({
+        icon: "error" + error,
+        title: "Invalid Token",
+        text: "Your session is invalid. Please try again.",
+      });
+      return;
+    }
+
+    const userId = decoded?.id;
+
+    try {
+      await resetPassword(
+        {
+          userId,
+          password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      ).unwrap();
 
       Swal.fire({
         icon: "success",
         title: "Password Updated!",
         text: "Your password has been successfully updated.",
       });
+
+      // ✅ remove token after reset
+      localStorage.removeItem("accessToken");
       navigate("/login");
     } catch (error) {
       Swal.fire({
@@ -66,6 +92,7 @@ const ResetPassword = () => {
           information="Create a new password. Ensure it differs from previous ones for security."
         />
         <form className="space-y-5" onSubmit={handleUpdatePassword}>
+          {/* --- New Password --- */}
           <div className="w-full">
             <label className="text-xl text-gray-800 mb-2 flex justify-start">
               New Password
@@ -89,6 +116,7 @@ const ResetPassword = () => {
             </div>
           </div>
 
+          {/* --- Confirm Password --- */}
           <div className="w-full">
             <label className="text-xl text-gray-800 mb-2 flex justify-start">
               Confirm Password

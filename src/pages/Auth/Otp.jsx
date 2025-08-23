@@ -28,6 +28,7 @@ function VerificationCode() {
   const [
     verifyEmail,
     {
+      data: verifyData, // ✅ this contains your API response
       isLoading: isVerifying,
       isSuccess: verifySuccess,
       isError: verifyError,
@@ -35,7 +36,7 @@ function VerificationCode() {
     },
   ] = useVerifyEmailMutation();
 
-  // show toast for resend
+  // handle resend toast
   useEffect(() => {
     if (resendSuccess) {
       Swal.fire({
@@ -53,17 +54,24 @@ function VerificationCode() {
     }
   }, [resendSuccess, resendError, resendErr]);
 
-  // show toast for verify
+  // handle verify toast + token save
   useEffect(() => {
-    if (verifySuccess) {
+    if (verifySuccess && verifyData) {
+      const token = verifyData?.data; // ✅ correct token
+      console.log("Received token:", token);
+
+      if (token) {
+        localStorage.setItem("accessToken", token);
+        navigate("/reset-password");
+      }
+
       Swal.fire({
         icon: "success",
         title: "Verification successful!",
         text: "Your email has been successfully verified.",
       });
-
-      navigate("/reset-password");
     }
+
     if (verifyError) {
       Swal.fire({
         icon: "error",
@@ -71,7 +79,7 @@ function VerificationCode() {
         text: verifyErr?.data?.message || "Invalid code. Please try again.",
       });
     }
-  }, [verifySuccess, verifyError, verifyErr, navigate]);
+  }, [verifySuccess, verifyError, verifyErr, verifyData, navigate]);
 
   const handleChange = (value, index) => {
     if (!isNaN(value)) {
@@ -96,10 +104,12 @@ function VerificationCode() {
       return;
     }
 
-    const payload = { verificationCode: enteredCode }; // or verification_code
+    const numberedCode = parseInt(enteredCode, 10);
+
+    const payload = { verificationCode: numberedCode };
     console.log("sending payload:", payload);
 
-    verifyEmail(payload);
+    verifyEmail(payload); // ✅ trigger mutation
   };
 
   const handleResend = () => {

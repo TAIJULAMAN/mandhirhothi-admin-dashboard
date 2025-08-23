@@ -28,12 +28,18 @@ const authApi = baseApi.injectEndpoints({
     }),
     
 resetPassword: builder.mutation({
-  query: (data) => ({
-    url: "user/reset_password",
-    method: "POST",
-    body: data, // should be { userId, password }
-  }),
-  invalidatesTags: ["User"], // better to use User not admin
+  query: ({ userId, password }) => {
+    const token = localStorage.getItem("accessToken");
+    return {
+      url: "user/reset_password",
+      method: "POST",
+      body: { userId, password },
+      headers: {
+        Authorization: `${token}`,
+      },
+    };
+  },
+  invalidatesTags: ["User"],
 }),
     
 }),
