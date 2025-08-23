@@ -16,6 +16,9 @@ export const getImageBaseUrl = () => {
 
 // get up
 export const getImageUrl = (imagePath) => {
+   if (!imagePath) {
+    return null; // or return a placeholder if you want
+  }
   if (imagePath.includes("http")) {
     return imagePath;
   }

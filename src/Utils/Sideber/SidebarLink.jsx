@@ -40,7 +40,7 @@ export const SidebarLink = [
   },
   {
     path: "/all-subscriber",
-    label: "Subscriptions",
+    label: "All Subscribers",
     icon: <LuCrown size={24} />,
   },
   {
