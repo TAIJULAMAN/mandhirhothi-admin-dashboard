@@ -11,7 +11,7 @@ import {
   LuCrown,
   LuNotebookPen,
 } from "react-icons/lu";
-import { MdBlockFlipped, MdOutlineReportProblem } from "react-icons/md";
+import { MdBlockFlipped, MdOutlineManageHistory, MdOutlineReportProblem } from "react-icons/md";
 import { IoIosNotificationsOutline, IoMdSettings } from "react-icons/io";
 import {
   RiCoupon4Line,
@@ -20,6 +20,7 @@ import {
 } from "react-icons/ri";
 import { TbMessageQuestion } from "react-icons/tb";
 import { GrUserSettings } from "react-icons/gr";
+import { BsCardChecklist } from "react-icons/bs";
 
 
 export const SidebarLink = [
@@ -42,6 +43,11 @@ export const SidebarLink = [
     path: "/all-subscriber",
     label: "All Subscribers",
     icon: <LuCrown size={24} />,
+  },
+    {
+    path: "/manage-subscription",
+    label: "Subscriptions",
+    icon: <BsCardChecklist size={24} />,
   },
   {
     path: "/blogs",

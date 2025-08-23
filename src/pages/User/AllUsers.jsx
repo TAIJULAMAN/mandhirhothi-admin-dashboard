@@ -287,21 +287,20 @@ const AllUsers = () => {
         </div>
       </div>
 
-      <Table
-        dataSource={transformedUsers}
-        columns={columns}
-        scroll={{ x: "max-content" }}
-        pagination={{
-          pageSize: pageLimit,
-          total: total,
-          current: currentPage,
-          showSizeChanger: false,
-          showQuickJumper: true,
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} users`,
-          onChange: (newPage) => setPage(newPage),
-        }}
-      />
+<Table
+  dataSource={transformedUsers}
+  columns={columns}
+  rowKey="_id"
+  scroll={{ x: "max-content" }}
+  loading={isLoading}
+  pagination={{
+    pageSize: pageLimit,
+    total,
+    current: currentPage,
+    onChange: (page) => setPage(page),
+  }}
+/>
+
 
       {/* Block/Unblock Modal */}
       <Modal open={isModalOpen} centered onCancel={handleCancel} footer={null}>

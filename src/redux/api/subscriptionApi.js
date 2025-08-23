@@ -2,13 +2,13 @@ import { baseApi } from "./baseApi";
 
 export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllSubscription: builder.query({
-      query: () => ({
-        url: "subscription/find_all_buyer_subscription",
-        method: "GET",
-      }),
-      providesTags: ["subscription"],
-    }),
+    // getAllSubscription: builder.query({
+    //   query: () => ({
+    //     url: "subscription/find_all_buyer_subscription",
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["subscription"],
+    // }),
     addFeature: builder.mutation({
       query: (data) => ({
         url: "package/create",
@@ -28,7 +28,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetAllSubscriptionQuery,
+  // useGetAllSubscriptionQuery,
   useAddFeatureMutation,
   useGetCurrentAllSubscribedMemberQuery,
 } = subscriptionApi;

@@ -4,6 +4,8 @@ import { IoSearch } from "react-icons/io5";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { useGetCurrentAllSubscribedMemberQuery } from "../../redux/api/subscriptionApi";
 import { getImageUrl } from "../../config/envConfig";
+import { FaRegEye } from "react-icons/fa";
+
 
 const AllUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,9 +59,9 @@ const AllUsers = () => {
       render: (_, record) => (
         <button
           onClick={() => showModal(record)}
-          className="bg-[#00823b] text-white px-4 py-2 rounded-md"
+          className="border border-[#00823b] rounded-lg p-1 bg-[#cce9ff] text-[#00823b] cursor-pointer"
         >
-          View
+          <FaRegEye className="w-8 h-8 text-[#00823b]" />
         </button>
       ),
     },
@@ -124,13 +126,15 @@ const AllUsers = () => {
           {selectedMember && (
             <div className="p-5">
               <h1 className="text-3xl font-bold text-[#00823b] mb-3">
-                {selectedMember.buyerId.fastname} {selectedMember.buyerId.lastname}
+                {selectedMember.buyerId.fastname}{" "}
+                {selectedMember.buyerId.lastname}
               </h1>
               <p className="text-lg font-semibold mb-2">
                 Email: {selectedMember.buyerId.email}
               </p>
               <p className="text-lg font-semibold mb-2">
-                Subscription Plan: {selectedMember.subscriptionId.subscriptionName}
+                Subscription Plan:{" "}
+                {selectedMember.subscriptionId.subscriptionName}
               </p>
               {selectedMember.buyerId.photo && (
                 <img
