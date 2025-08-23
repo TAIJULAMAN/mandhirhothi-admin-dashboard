@@ -14,7 +14,7 @@ export const adminApi = baseApi.injectEndpoints({
         // Get all admins with pagination
         getAllAdmins: builder.query({
             query: ({ limit = 10, page = 1 } = {}) =>
-            `auth/find_by_admin_all_users?limit=${limit}&page=${page}`,
+            `auth/find_by_all_admin?limit=${limit}&page=${page}`,
             providesTags: ["admin"],
         }),
         // Delete admin

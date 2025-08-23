@@ -20,7 +20,7 @@ export default function CreateAdmin() {
   // Update admins when data changes
   useEffect(() => {
     if (adminData && adminData.success) {
-      setAdmins(adminData.data.all_users || []);
+      setAdmins(adminData.data.all_admin || []);
       setTotalAdmins(adminData.data.meta.total || 0);
     }
   }, [adminData]);
@@ -36,12 +36,10 @@ export default function CreateAdmin() {
   // Function to show delete modal
   const showDeleteModal = (admin) => {
     setSelectedAdmin(admin);
-    console.log(selectedAdmin);
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteAdmin = () => {
-  
     setIsDeleteModalOpen(false);
     message.success("Admin deleted successfully");
   };
