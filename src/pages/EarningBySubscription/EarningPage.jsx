@@ -5,7 +5,7 @@ import PageHeading from "../../Components/Shared/PageHeading";
 import { IoSearch } from "react-icons/io5";
 import Loader from "../../Components/Shared/Loaders/Loader";
 
-function EarningPage() {
+function EarningBySubsPage() {
   const { data, isLoading } = useGetEarningsStatsQuery();
   console.log("Earning data", data);
   console.log(isLoading);
@@ -85,4 +85,4 @@ function EarningPage() {
   );
 }
 
-export default EarningPage;
+export default EarningBySubsPage;

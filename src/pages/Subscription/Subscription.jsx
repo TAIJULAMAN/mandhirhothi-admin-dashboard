@@ -3,6 +3,7 @@ import { FaCheck } from "react-icons/fa";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { useGetAllSubscriptionQuery } from "../../redux/api/manageSubscriptionApi";
 import UpdateSubscriptionModal from "./UpdateSubscriptionModal";
+import Loader from "../../Components/Shared/Loaders/Loader";
 
 export default function Subscription() {
   const {
@@ -16,9 +17,7 @@ export default function Subscription() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
+      <Loader></Loader>
     );
   }
 
