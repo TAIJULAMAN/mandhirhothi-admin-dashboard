@@ -1,290 +1,57 @@
 // CreateAdmin.jsx
-import React, { useState } from "react";
-import { Table, Modal, message, ConfigProvider } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table, Modal, message, ConfigProvider, Spin } from "antd";
 import { MdDelete } from "react-icons/md";
 import PageHeading from "../../Components/Shared/PageHeading";
 import DeleteAdminModal from "./DeleteAdminModal";
 import CreateAdminModal from "./CreateAdminModal";
+import { useGetAllAdminsQuery } from "../../redux/api/adminApi";
+import { getImageUrl } from "../../config/envConfig";
 
 export default function CreateAdmin() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [page, setPage] = useState(1);
-  const [admins, setAdmins] = useState([
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      joinDate: "2024-01-15",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-    {
-      id: "2",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      joinDate: "2024-02-20",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-    },
-  ]);
+  const { data: adminData, isLoading, error, refetch } = useGetAllAdminsQuery({ limit: 10, page });
+  const [admins, setAdmins] = useState([]);
+  const [totalAdmins, setTotalAdmins] = useState(0);
 
+  // Update admins when data changes
+  useEffect(() => {
+    if (adminData && adminData.success) {
+      setAdmins(adminData.data.all_admin || []);
+      setTotalAdmins(adminData.data.meta.total || 0);
+    }
+  }, [adminData]);
+
+  // Handle API errors
+  useEffect(() => {
+    if (error) {
+      message.error("Failed to fetch admins");
+      console.error("Admin fetch error:", error);
+    }
+  }, [error]);
+
+  // Function to show delete modal
   const showDeleteModal = (admin) => {
     setSelectedAdmin(admin);
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteAdmin = () => {
-    setAdmins(admins.filter((admin) => admin.id !== selectedAdmin.id));
     setIsDeleteModalOpen(false);
     message.success("Admin deleted successfully");
   };
 
   const handleCreateAdmin = (newAdmin) => {
-    setAdmins([...admins, newAdmin]);
+    // Add the new admin to the beginning of the list
+    setAdmins([newAdmin, ...admins]);
     setIsCreateModalOpen(false);
     message.success("Admin created successfully");
+    
+    // Refetch data to ensure we have the latest from the server
+    refetch();
   };
 
   const columns = [
@@ -294,7 +61,7 @@ export default function CreateAdmin() {
       render: (_, record) => (
         <div className="flex gap-3 items-center">
           <img
-            src={record.profileImage}
+            src={getImageUrl(record?.photo) || "https://picsum.photos/200"}
             alt="Admin profile"
             className="w-12 h-12 object-cover rounded-full border-2 border-gray-200"
             onError={(e) => {
@@ -302,17 +69,54 @@ export default function CreateAdmin() {
             }}
           />
           <div>
-            <div className="text-gray-900 font-medium">{record.name}</div>
+            <div className="text-gray-900 font-medium">
+              {record.fastname} {record.lastname}
+            </div>
             <div className="text-sm text-gray-600">{record.email}</div>
           </div>
         </div>
       ),
     },
     {
-      title: "Join Date",
-      dataIndex: "joinDate",
-      key: "joinDate",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       width: 120,
+      render: (status) => (
+        <span className={`px-2 py-1 rounded-full text-xs ${
+          status === "isProgress" 
+            ? "bg-blue-100 text-blue-800" 
+            : "bg-gray-100 text-gray-800"
+        }`}>
+          {status || "Unknown"}
+        </span>
+      ),
+    },
+    {
+      title: "Verified",
+      dataIndex: "isVerify",
+      key: "isVerify",
+      width: 100,
+      render: (isVerify) => (
+        <span className={`px-2 py-1 rounded-full text-xs ${
+          isVerify 
+            ? "bg-green-100 text-green-800" 
+            : "bg-red-100 text-red-800"
+        }`}>
+          {isVerify ? "Yes" : "No"}
+        </span>
+      ),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      width: 100,
+      render: (role) => (
+        <span className="px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-xs">
+          {role || "User"}
+        </span>
+      ),
     },
     {
       title: "Action",
@@ -342,28 +146,36 @@ export default function CreateAdmin() {
         </button>
       </div>
 
-      <ConfigProvider
-        theme={{
-          components: {
-            Table: {
-              headerBg: "#00823b",
-              headerColor: "#ffffff",
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: "#00823b",
+                headerColor: "#ffffff",
+              },
             },
-          },
-        }}
-      >
-        <Table
-          dataSource={admins}
-          columns={columns}
-          rowKey="id"
-          scroll={{ x: "max-content" }}
-          pagination={{
-            pageSize: 10,
-            current: page,
-            onChange: (page) => setPage(page),
           }}
-        />
-      </ConfigProvider>
+        >
+          <Table
+            dataSource={admins}
+            columns={columns}
+            rowKey="_id"
+            scroll={{ x: "max-content" }}
+            pagination={{
+              pageSize: 10,
+              current: page,
+              total: totalAdmins,
+              onChange: (page) => setPage(page),
+              showSizeChanger: false,
+            }}
+          />
+        </ConfigProvider>
+      )}
 
       <DeleteAdminModal
         isOpen={isDeleteModalOpen}

@@ -1,12 +1,30 @@
-// DeleteAdminModal.jsx
 import React from "react";
 import { Modal } from "antd";
 import img from "../../assets/block.png";
+import { useDeleteAdminMutation } from "../../redux/api/adminApi";
+import Swal from "sweetalert2";
 
 const DeleteAdminModal = ({ isOpen, onClose, adminData }) => {
-  const handleDelete = () => {
-    console.log("Admin data to delete:", adminData);
-    onClose();
+  const [deleteAdmin, { isLoading }] = useDeleteAdminMutation();
+
+  const handleDelete = async () => {
+    if (!adminData?._id) return;
+
+    try {
+      await deleteAdmin(adminData._id).unwrap(); // ✅ unwrap returns resolved/rejected promise
+      onClose(); // close main modal
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: `${adminData?.firstName} ${adminData?.lastName} has been removed.`,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Delete Failed",
+        text: error?.data?.message || "Something went wrong.",
+      });
+    }
   };
 
   return (
@@ -42,9 +60,10 @@ const DeleteAdminModal = ({ isOpen, onClose, adminData }) => {
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 text-white font-semibold w-1/3 py-3 px-5 rounded-lg hover:bg-red-600 transition-colors"
+            disabled={isLoading}
+            className="bg-red-500 text-white font-semibold w-1/3 py-3 px-5 rounded-lg hover:bg-red-600 transition-colors cursor-pointer"
           >
-            Delete
+            {isLoading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

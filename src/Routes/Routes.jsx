@@ -20,6 +20,7 @@ import Blogs from "../pages/Blogs/Blogs";
 import CreateAdmin from "../pages/CreateAdmin/CreateAdmin";
 import Reports from "../pages/Report/Reports";
 import PrivateRoute from "./PrivetRoute";
+import Subscription from "../pages/Subscription/Subscription";
 
 export const Routes = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/all-subscriber",
         element: <AllSubscriber />,
+      },
+      {
+        path: "/manage-subscription",
+        element: <Subscription></Subscription>,
       },
       {
         path: "/earnings-management",

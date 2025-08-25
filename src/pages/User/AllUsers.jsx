@@ -11,6 +11,7 @@ import {
 import Loader from "../../Components/Shared/Loaders/Loader";
 import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import toast from "react-hot-toast";
+import { getImageUrl } from "../../config/envConfig";
 
 const AllUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,12 +19,12 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm,] = useState("");
 
   const { data, isLoading, error } = useGetAllUserQuery({
     page,
     limit,
-    searchTerm: searchTerm,
+    // searchTerm: searchTerm,
   });
 
   const [
@@ -130,7 +131,7 @@ const AllUsers = () => {
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <img
-            src={record?.img}
+            src={getImageUrl(record?.img)}
             className="w-10 h-10 object-cover rounded-full"
             alt="User Avatar"
             onError={(e) => {
@@ -271,7 +272,7 @@ const AllUsers = () => {
       <div className="mb-4">
         {/* Search Bar */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2>
+          {/* <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2> */}
           <div className="md:w-80">
             {/* <Input
               placeholder="Search by name, email, or role..."
@@ -286,21 +287,20 @@ const AllUsers = () => {
         </div>
       </div>
 
-      <Table
-        dataSource={transformedUsers}
-        columns={columns}
-        scroll={{ x: "max-content" }}
-        pagination={{
-          pageSize: pageLimit,
-          total: total,
-          current: currentPage,
-          showSizeChanger: false,
-          showQuickJumper: true,
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} users`,
-          onChange: (newPage) => setPage(newPage),
-        }}
-      />
+<Table
+  dataSource={transformedUsers}
+  columns={columns}
+  rowKey="_id"
+  scroll={{ x: "max-content" }}
+  loading={isLoading}
+  pagination={{
+    pageSize: pageLimit,
+    total,
+    current: currentPage,
+    onChange: (page) => setPage(page),
+  }}
+/>
+
 
       {/* Block/Unblock Modal */}
       <Modal open={isModalOpen} centered onCancel={handleCancel} footer={null}>

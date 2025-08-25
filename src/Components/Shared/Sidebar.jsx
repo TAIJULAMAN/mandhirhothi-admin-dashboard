@@ -2,6 +2,10 @@ import React, { useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import { SidebarLink } from "../../Utils/Sideber/SidebarLink.jsx";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { Modal } from "antd";
+import { persistor } from "../../redux/store";
+
+
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const location = useLocation();
@@ -18,13 +22,25 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   //   }
   // }, [ref, location.pathname]);
 
-  const handleLogOut = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
+const handleLogOut = () => {
+  Modal.confirm({
+    title: "Are you sure you want to log out?",
+    content: "You will need to log in again to access your account.",
+    okText: "Yes, Logout",
+    cancelText: "Cancel",
+    okType: "danger",
+    onOk: () => {
+      // Clear local storage
       localStorage.removeItem("token");
+
+      // Clear redux-persist storage
+      persistor.purge();
+
+      // Navigate to login page
       naviagate("/login");
-    }
-  };
+    },
+  });
+};
 
   return (
     <>
@@ -73,7 +89,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         <div className="mt-10 w-full px-5 text-white">
           <button
             onClick={handleLogOut}
-            className="flex items-center gap-4 w-full py-3 rounded-lg bg-[#00823b] justify-center"
+            className="flex items-center gap-4 w-full py-3 rounded-lg bg-[#00823b] justify-center cursor-pointer"
           >
             <RiLogoutBoxLine className="w-5 h-5 font-bold" />
             <span>Logout</span>

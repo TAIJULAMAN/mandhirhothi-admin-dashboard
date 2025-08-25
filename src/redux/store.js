@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage";
 import { baseApi } from "./api/baseApi";
 import { authSlice } from "./Slice/authSlice";
 const persistConfig = {
-  key: "BAZARYA-app",
+  key: "madir-app",
   storage,
   blacklist: ["baseApi"], // Prevent persisting API cache
 };
