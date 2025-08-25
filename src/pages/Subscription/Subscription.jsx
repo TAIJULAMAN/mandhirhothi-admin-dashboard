@@ -46,7 +46,7 @@ export default function Subscription() {
                       <span className="text-5xl font-semibold text-green-600">
                         £{currentPlan.price}
                       </span>
-                      <span className="text-green-600 ml-2">/Per Month</span>
+                      <span className="text-green-600 ml-2">/4 months</span>
                     </div>
 
                     <div className="text-center pb-10">
