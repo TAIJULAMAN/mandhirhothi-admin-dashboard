@@ -14,6 +14,7 @@ import {
 import { MdBlockFlipped, MdOutlineManageHistory, MdOutlineReportProblem } from "react-icons/md";
 import { IoIosNotificationsOutline, IoMdSettings } from "react-icons/io";
 import {
+  RiContactsLine,
   RiCoupon4Line,
   RiDashboard2Line,
   RiUserSettingsLine,
@@ -69,6 +70,12 @@ export const SidebarLink = [
     path: "/profile",
     label: "Profile Setting",
     icon: <IoMdSettings size={24} />,
+  },
+  
+  {
+    path: "/All-Contact",
+    label: "All Contact",
+    icon: <RiContactsLine size={24} />,
   },
   {
     path: "/faq-management",
