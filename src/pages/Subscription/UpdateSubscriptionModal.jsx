@@ -5,7 +5,12 @@ import { RxCross2 } from "react-icons/rx";
 import { GoPlus } from "react-icons/go";
 import { useUpdateSubscriptionMutation } from "../../redux/api/manageSubscriptionApi";
 
-export default function UpdateSubscriptionModal({ open, onClose, currentPlan, refetch }) {
+export default function UpdateSubscriptionModal({
+  open,
+  onClose,
+  currentPlan,
+  refetch,
+}) {
   const [updateSubscription] = useUpdateSubscriptionMutation();
   const [formData, setFormData] = useState({
     subscriptionName: "",
@@ -15,7 +20,6 @@ export default function UpdateSubscriptionModal({ open, onClose, currentPlan, re
   });
   const [formErrors, setFormErrors] = useState({});
 
-  // Load current plan into form
   useEffect(() => {
     if (currentPlan) {
       setFormData({
@@ -31,17 +35,24 @@ export default function UpdateSubscriptionModal({ open, onClose, currentPlan, re
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.subscriptionName?.trim()) errors.subscriptionName = "Name is required";
-    if (!formData.price || formData.price <= 0) errors.price = "Valid price is required";
-    if (!formData.description?.trim()) errors.description = "Description is required";
+    if (!formData.subscriptionName?.trim())
+      errors.subscriptionName = "Name is required";
+    if (!formData.price || formData.price <= 0)
+      errors.price = "Valid price is required";
+    if (!formData.description?.trim())
+      errors.description = "Description is required";
     const validFeatures = formData.featuresList.filter((f) => f.trim());
-    if (validFeatures.length === 0) errors.featuresList = "At least one feature is required";
+    if (validFeatures.length === 0)
+      errors.featuresList = "At least one feature is required";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleAddFeature = () => {
-    setFormData((prev) => ({ ...prev, featuresList: [...prev.featuresList, ""] }));
+    setFormData((prev) => ({
+      ...prev,
+      featuresList: [...prev.featuresList, ""],
+    }));
   };
 
   const handleRemoveFeature = (index) => {
@@ -66,12 +77,16 @@ export default function UpdateSubscriptionModal({ open, onClose, currentPlan, re
         subscriptionName: formData.subscriptionName.trim(),
         price: Number(formData.price),
         description: formData.description.trim(),
-        featuresList: formData.featuresList.filter((f) => f.trim()).map((value) => ({ value })),
+        featuresList: formData.featuresList
+          .filter((f) => f.trim())
+          .map((value) => ({ value })),
       };
 
-      console.log("Saving Data:", payload); // 👈 check payload before sending
+      console.log("Saving Data:", payload);
+      console.log("Current Plan ID:", currentPlan._id);
 
-      await updateSubscription(payload).unwrap();
+      // ✅ FIXED CALL
+      await updateSubscription({ id: currentPlan._id, data: payload }).unwrap();
 
       message.success("Plan updated successfully");
       onClose();
@@ -85,51 +100,83 @@ export default function UpdateSubscriptionModal({ open, onClose, currentPlan, re
   return (
     <Modal open={open} centered onCancel={onClose} footer={null} width={600}>
       <div className="p-5 max-h-[80vh] overflow-y-auto">
-        <h2 className="text-center text-2xl font-bold">Update Subscription Plan</h2>
-        <p className="text-center text-gray-500 mt-2">Update plan details and features</p>
+        <h2 className="text-center text-2xl font-bold">
+          Update Subscription Plan
+        </h2>
+        <p className="text-center text-gray-500 mt-2">
+          Update plan details and features
+        </p>
 
         <div className="mt-6 space-y-6">
           {/* Plan Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-2">Plan Name:</label>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              Plan Name:
+            </label>
             <input
               type="text"
               value={formData.subscriptionName}
-              onChange={(e) => setFormData((prev) => ({ ...prev, subscriptionName: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  subscriptionName: e.target.value,
+                }))
+              }
               className="p-2 block w-full border border-gray-400 rounded-md"
               placeholder="Enter plan name"
             />
-            {formErrors.subscriptionName && <p className="text-red-500 text-sm">{formErrors.subscriptionName}</p>}
+            {formErrors.subscriptionName && (
+              <p className="text-red-500 text-sm">
+                {formErrors.subscriptionName}
+              </p>
+            )}
           </div>
 
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-2">Price (£):</label>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              Price (£):
+            </label>
             <input
               type="number"
               value={formData.price}
-              onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, price: e.target.value }))
+              }
               className="p-2 block w-full border border-gray-400 rounded-md"
               placeholder="Enter price"
             />
-            {formErrors.price && <p className="text-red-500 text-sm">{formErrors.price}</p>}
+            {formErrors.price && (
+              <p className="text-red-500 text-sm">{formErrors.price}</p>
+            )}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-2">Description:</label>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              Description:
+            </label>
             <textarea
               value={formData.description}
-              onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
               className="p-2 block w-full border border-gray-400 rounded-md"
               placeholder="Enter description"
             />
-            {formErrors.description && <p className="text-red-500 text-sm">{formErrors.description}</p>}
+            {formErrors.description && (
+              <p className="text-red-500 text-sm">{formErrors.description}</p>
+            )}
           </div>
 
           {/* Features */}
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-gray-800">Features:</label>
+            <label className="block text-sm font-medium text-gray-800">
+              Features:
+            </label>
             {formData.featuresList.map((feature, index) => (
               <div key={index} className="flex gap-2">
                 <input
@@ -147,7 +194,9 @@ export default function UpdateSubscriptionModal({ open, onClose, currentPlan, re
                 </button>
               </div>
             ))}
-            {formErrors.featuresList && <p className="text-red-500 text-sm">{formErrors.featuresList}</p>}
+            {formErrors.featuresList && (
+              <p className="text-red-500 text-sm">{formErrors.featuresList}</p>
+            )}
           </div>
 
           <div className="flex justify-end">
