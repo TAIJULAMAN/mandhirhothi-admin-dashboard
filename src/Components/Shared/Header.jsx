@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { imageUrl } from "../../Utils/server";
 import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
 import { RxCross1 } from "react-icons/rx";
