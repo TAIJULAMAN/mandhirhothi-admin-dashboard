@@ -3,8 +3,12 @@ import { ConfigProvider, message, Table } from "antd";
 import { MdEdit, MdDelete } from "react-icons/md";
 import EditBlogModal from "./EditBlogModal";
 import DeleteBlogModal from "./DeleteBlogModal";
-import {  useDeleteBlogMutation, useGetAllBlogsQuery } from "../../redux/api/blogApi";
+import {
+  useDeleteBlogMutation,
+  useGetAllBlogsQuery,
+} from "../../redux/api/blogApi";
 import Loader from "../../Components/Shared/Loaders/Loader";
+import { getImageBaseUrl } from "../../config/envConfig";
 
 const AllBlogs = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -14,7 +18,7 @@ const AllBlogs = () => {
 
   // 🔹 Call your API
   const { data, isLoading, isError } = useGetAllBlogsQuery({ page, limit: 10 });
-   const [deleteBlog] = useDeleteBlogMutation();
+  const [deleteBlog] = useDeleteBlogMutation();
 
   // 🔹 Extract blogs safely
   const blogs = data?.data?.allBlogsList || [];
@@ -23,7 +27,7 @@ const AllBlogs = () => {
 
     try {
       await deleteBlog(selectedBlog._id).unwrap();
-      
+
       setIsDeleteModalOpen(false);
     } catch (err) {
       console.error("Delete error:", err);
@@ -40,7 +44,6 @@ const AllBlogs = () => {
   const showDeleteModal = (blog) => {
     setSelectedBlog(blog);
     setIsDeleteModalOpen(true);
-    
   };
 
   const columns = [
@@ -51,11 +54,12 @@ const AllBlogs = () => {
         <div className="flex gap-4">
           <div className="flex-shrink-0">
             <img
-              src={`https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400`}
+              src={getImageBaseUrl() + record.photo}
               alt="Blog thumbnail"
               className="w-20 h-20 object-cover rounded-lg border border-gray-200"
               onError={(e) => {
-                e.target.src = "https://via.placeholder.com/80x80?text=No+Image";
+                e.target.src =
+                  "https://via.placeholder.com/80x80?text=No+Image";
               }}
             />
           </div>
@@ -63,9 +67,7 @@ const AllBlogs = () => {
             <div className="text-gray-900 leading-relaxed">
               {record.blogTitle}
             </div>
-            <div className="text-gray-900 leading-relaxed">
-              admin
-            </div>
+            <div className="text-gray-900 leading-relaxed">admin</div>
           </div>
         </div>
       ),
@@ -100,7 +102,12 @@ const AllBlogs = () => {
     },
   ];
 
-  if (isLoading) return <><Loader></Loader></>;
+  if (isLoading)
+    return (
+      <>
+        <Loader></Loader>
+      </>
+    );
   if (isError) return <p>Failed to load blogs.</p>;
 
   return (
@@ -110,6 +117,8 @@ const AllBlogs = () => {
           Table: {
             headerBg: "#00823b",
             headerColor: "rgb(255,255,255)",
+            cellFontSize: 16,
+            headerSplitColor: "#00823b",
           },
         },
       }}
@@ -134,7 +143,6 @@ const AllBlogs = () => {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         blogData={selectedBlog}
-        
       />
 
       <DeleteBlogModal

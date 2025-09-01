@@ -23,7 +23,7 @@ const Login = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       Swal.fire({
         icon: "error",
@@ -36,6 +36,7 @@ const Login = () => {
 
     try {
       const response = await logIn(loginData).unwrap();
+      console.log("Login response:", response);
 
       if (response?.success && response?.data?.accessToken) {
         // console.log("Login successful:", response.data.accessToken);

@@ -2,35 +2,46 @@
 import React, { useState } from "react";
 import { Modal, Form, Input, Upload, Button, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useCreateAdminMutation } from "../../redux/api/adminApi";
 
 const CreateAdminModal = ({ isOpen, onClose }) => {
   const [form] = Form.useForm();
   const [imageUrl, setImageUrl] = useState("");
+    const [createAdmin, { isLoading }] = useCreateAdminMutation();
 
-  const handleSave = async (values) => {
-    try {
-      const newAdmin = {
-        id: Date.now().toString(),
-        firstName: values.firstName,
-        lastName: values.lastName,
-        name: `${values.firstName} ${values.lastName}`,
-        email: values.email,
-        password: values.password,
-        joinDate: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
-        profileImage:
-          imageUrl || "https://via.placeholder.com/400x400?text=No+Image",
-      };
+    const handleSave = async (values) => {
+      try {
+        const newAdmin = {
+          fastname: values.firstName,
+          lastname: values.lastName,
+          email: values.email,
+          password: values.password,
+          isVerify: true,
+          role: "admin",
+          photo: imageUrl || "",
+        };
 
-      console.log("New Admin Data:", newAdmin);
+        await createAdmin(newAdmin).unwrap();
+         message.success("Admin created successfully!");
+      } catch (error) {
+        message.error("Failed to create admin: " + error.message);
+      }
+    };
 
-      message.success("Admin data logged to console");
-      form.resetFields();
-      setImageUrl("");
-      onClose();
-    } catch (error) {
-      message.error("Failed to create admin", error.message);
-    }
-  };
+    // React.useEffect(() => {
+    //   if (isSuccess) {
+       
+    //     form.resetFields();
+    //     setImageUrl("");
+    //     onClose();
+    //   }
+    //   if (isError) {
+    //     message.error("Failed to create admin.");
+    //   }
+    // }, [isSuccess, isError, form, onClose]);
+
+
+
 
   const handleImageChange = (info) => {
     if (info.file.status === "done" || info.file.status === "uploading") {
@@ -148,9 +159,10 @@ const CreateAdminModal = ({ isOpen, onClose }) => {
             background: "#0b8f3e",
             borderColor: "#0b8f3e",
             padding: "20px 0",
+            cursor: isLoading ? "not-allowed" : "pointer",
           }}
         >
-          Create Admin
+          {isLoading ? "Creating..." : "Create Admin"}
         </Button>
       </Form>
     </Modal>

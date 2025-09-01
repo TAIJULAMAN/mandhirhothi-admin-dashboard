@@ -8,27 +8,31 @@ import { decodeAuthToken } from "../../Utils/decode-access-token";
 import { useGetProfileQuery } from "../../redux/api/profileApi";
 import { RxCross1 } from "react-icons/rx";
 import Loader from "./Loaders/Loader";
+import { getImageBaseUrl } from "../../config/envConfig";
+import { useSelector } from "react-redux";
 
 function Header({ toggleSidebar, isSidebarOpen }) {
   const [isOpen] = useState(true);
-  const token = localStorage.getItem("token");
+  const { token } = useSelector((state) => state.auth);
   const decodedToken = decodeAuthToken(token);
 
-  const { data: profileData, isLoading } = useGetProfileQuery({ _id: decodedToken?.id });
+  const { data: profileData, isLoading } = useGetProfileQuery({
+    _id: decodedToken?.id,
+  });
 
   const navigate = useNavigate();
   const showModal = () => navigate("/notifications");
 
   if (!isOpen) return null;
 
-if (isLoading) {
-  <Loader />;
-}
+  if (isLoading) {
+    <Loader />;
+  }
 
-// console.log("Profile Data:", profileData);
-// console.log(isLoading, "Loading State");
+  const profileImage = getImageBaseUrl() + profileData?.data?.photo;
 
-
+  // console.log("Profile Data:", profileData);
+  // console.log(isLoading, "Loading State");
 
   return (
     <div className="px-5 md:px-10 h-16 flex justify-between items-center bg-white shadow">
@@ -51,12 +55,8 @@ if (isLoading) {
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
           <img
-          src="https://avatar.iran.liara.run/public/15"
-            // src={imageUrl(
-            //   profileData?.data?.photo
-            //     ? `${import.meta.env.VITE_API_URL}/${profileData.data.photo}`
-            //     : ""
-            // )}
+            // src="https://avatar.iran.liara.run/public/15"
+            src={profileImage}
             className="md:size-12 size-10 object-cover rounded-full"
             alt="User Avatar"
           />
