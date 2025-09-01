@@ -13,18 +13,24 @@ import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import toast from "react-hot-toast";
 import { getImageUrl } from "../../config/envConfig";
 
-const AllUsers = () => {
+const AllUsers = ({search}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  // const [searchTerm,] = useState("");
+  const [searchTerm, setSearchTerm] = useState(search || "");
+
+  useEffect(() => {
+    setSearchTerm(search);
+  }, [search]);
+
+  // Fetch users
 
   const { data, isLoading, error } = useGetAllUserQuery({
     page,
     limit,
-    // searchTerm: searchTerm,
+    searchTerm: searchTerm,
   });
 
   const [
@@ -101,10 +107,9 @@ const AllUsers = () => {
     }
   };
 
-  // const handleSearch = (value) => {
-  //   setSearchTerm(value);
-  //   setPage(1);
-  // };
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
 
   const transformedUsers = users.map((user) => ({
     ...user,
@@ -273,8 +278,8 @@ const AllUsers = () => {
         {/* Search Bar */}
         <div className="flex justify-between items-center mb-4">
           {/* <h2 className="text-2xl font-bold text-[#00823b]">All Users</h2> */}
-          <div className="md:w-80">
-            {/* <Input
+          {/* <div className="md:w-80">
+            <Input
               placeholder="Search by name, email, or role..."
               prefix={<SearchOutlined className="text-gray-400" />}
               value={searchTerm}
@@ -282,8 +287,8 @@ const AllUsers = () => {
               allowClear
               size="large"
               className="rounded-lg"
-            /> */}
-          </div>
+            />
+          </div> */}
         </div>
       </div>
 

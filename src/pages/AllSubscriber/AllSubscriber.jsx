@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { ConfigProvider, Modal, Table } from "antd";
+import { ConfigProvider, Modal, Table, Tag } from "antd";
 import { IoSearch } from "react-icons/io5";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { useGetCurrentAllSubscribedMemberQuery } from "../../redux/api/subscriptionApi";
 import { getImageUrl } from "../../config/envConfig";
 import { FaRegEye } from "react-icons/fa";
-
 
 const AllUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,17 +40,22 @@ const AllUsers = () => {
       title: "Name",
       key: "name",
       render: (_, record) =>
-        `${record.buyerId.fastname} ${record.buyerId.lastname}`,
+        `${record.buyerId?.fastname || ""} ${record.buyerId?.lastname || ""}`,
     },
     {
       title: "Email",
       key: "email",
-      render: (_, record) => record.buyerId.email,
+      render: (_, record) => record.buyerId?.email || "N/A",
     },
     {
       title: "Subscription Plan",
       key: "plan",
-      render: (_, record) => record.subscriptionId.subscriptionName,
+      render: (_, record) =>
+        record.subscriptionId?.subscriptionName ? (
+          record.subscriptionId.subscriptionName
+        ) : (
+          <Tag color="red">No Plan</Tag>
+        ),
     },
     {
       title: "Action",
@@ -126,17 +130,17 @@ const AllUsers = () => {
           {selectedMember && (
             <div className="p-5">
               <h1 className="text-3xl font-bold text-[#00823b] mb-3">
-                {selectedMember.buyerId.fastname}{" "}
-                {selectedMember.buyerId.lastname}
+                {selectedMember.buyerId?.fastname}{" "}
+                {selectedMember.buyerId?.lastname}
               </h1>
               <p className="text-lg font-semibold mb-2">
-                Email: {selectedMember.buyerId.email}
+                Email: {selectedMember.buyerId?.email || "N/A"}
               </p>
               <p className="text-lg font-semibold mb-2">
                 Subscription Plan:{" "}
-                {selectedMember.subscriptionId.subscriptionName}
+                {selectedMember.subscriptionId?.subscriptionName || "No Plan"}
               </p>
-              {selectedMember.buyerId.photo && (
+              {selectedMember.buyerId?.photo && (
                 <img
                   src={getImageUrl(selectedMember.buyerId.photo)}
                   alt="User"

@@ -20,6 +20,7 @@ import Blogs from "../pages/Blogs/Blogs";
 import CreateAdmin from "../pages/CreateAdmin/CreateAdmin";
 import Reports from "../pages/Report/Reports";
 import Subscription from "../pages/Subscription/Subscription";
+import Contact from "../pages/Contact/Contact";
 
 export const Routes = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/All-Contact",
+        element: <Contact />,
       },
       {
         path: "/faq-management",

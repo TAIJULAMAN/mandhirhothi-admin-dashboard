@@ -12,6 +12,7 @@ const authApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["admin"],
     }),
+
     forgotPassword: builder.mutation({
       query: (data) => ({
         url: "user/forgot_password",
@@ -26,23 +27,22 @@ const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-    
-resetPassword: builder.mutation({
-  query: ({ userId, password }) => {
-    const token = localStorage.getItem("accessToken");
-    return {
-      url: "user/reset_password",
-      method: "POST",
-      body: { userId, password },
-      headers: {
-        Authorization: `${token}`,
+
+    resetPassword: builder.mutation({
+      query: ({ userId, password }) => {
+        const token = localStorage.getItem("accessToken");
+        return {
+          url: "user/reset_password",
+          method: "POST",
+          body: { userId, password },
+          headers: {
+            Authorization: `${token}`,
+          },
+        };
       },
-    };
-  },
-  invalidatesTags: ["User"],
-}),
-    
-}),
+      invalidatesTags: ["User"],
+    }),
+  }),
 });
 
 export const {
@@ -50,7 +50,6 @@ export const {
   useForgotPasswordMutation,
   useVerifyEmailMutation,
   useResetPasswordMutation,
-
 } = authApi;
 
 export default authApi;

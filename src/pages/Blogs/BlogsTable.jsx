@@ -77,6 +77,14 @@ const AllBlogs = () => {
       dataIndex: "content",
       key: "content",
       ellipsis: true,
+      render: (text) => {
+        const words = text ? text.split(" ") : [];
+        const shortText =
+          words.length > 7
+            ? words.slice(0, 7).join(" ") + "..."
+            : text;
+        return shortText;
+      },
     },
     {
       title: "Action",

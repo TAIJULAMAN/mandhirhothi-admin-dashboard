@@ -1,9 +1,7 @@
 // Function to get the base API URL
-export const url =
-  "https://treated-fighting-grounds-boring.trycloudflare.com/api/v1/";
+export const imageUrl = "https://heritage-despite-relaxation-became.trycloudflare.com/";
+export const url = `${imageUrl}api/v1/`;
 
-export const imageUrl =
-  "https://treated-fighting-grounds-boring.trycloudflare.com/";
 
 export const getBaseUrl = () => {
   return url;
