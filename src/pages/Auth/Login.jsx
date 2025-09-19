@@ -11,6 +11,7 @@ import { setUser } from "../../redux/Slice/authSlice";
 import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import Loader from "../../Components/Shared/Loaders/Loader";
 import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -51,12 +52,31 @@ const Login = () => {
       console.log("Login response:", response);
 
       if (response?.success && response?.data?.accessToken) {
-        // console.log("Login successful:", response.data.accessToken);
-        localStorage.setItem("token", response?.data?.accessToken);
+        const token = response?.data?.accessToken;
+        // Decode and verify role before proceeding
+        let role = undefined;
+        try {
+          const decoded = jwtDecode(token);
+          role = decoded?.role;
+        } catch (err) {
+          console.error("Failed to decode token", err);
+        }
+
+        if (role !== "admin") {
+          Swal.fire({
+            icon: "error",
+            title: "Access Denied",
+            text: "Only admin can login.",
+          });
+          return; // Do not store token or navigate
+        }
+
+        // Proceed only for admin
+        localStorage.setItem("token", token);
         dispatch(
           setUser({
             user: response?.data || {},
-            token: response?.data?.accessToken,
+            token,
           })
         );
 
