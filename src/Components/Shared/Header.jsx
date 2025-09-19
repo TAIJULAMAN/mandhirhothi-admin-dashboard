@@ -36,7 +36,9 @@ function Header({ toggleSidebar, isSidebarOpen }) {
   return (
     <div className="px-5 py-10 md:px-10 h-16 flex justify-between items-center bg-white shadow">
       <div className="flex items-center gap-4">
-        <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
+       <Link to="/">
+       <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
+       </Link>
       </div>
 
       <div className="flex items-center gap-5">
@@ -72,7 +74,7 @@ function Header({ toggleSidebar, isSidebarOpen }) {
         {/* Hamburger Button */}
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 md:hidden cursor-pointer"
+          className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 lg:hidden cursor-pointer"
         >
           {isSidebarOpen ? (
             <RxCross1 size={20} />
