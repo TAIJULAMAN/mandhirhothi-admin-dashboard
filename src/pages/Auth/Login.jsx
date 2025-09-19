@@ -72,7 +72,7 @@ const Login = () => {
         }
 
         // Proceed only for admin
-        localStorage.setItem("token", token);
+        // localStorage.setItem("token", token);
         dispatch(
           setUser({
             user: response?.data || {},

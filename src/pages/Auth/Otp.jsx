@@ -6,6 +6,8 @@ import {
   useVerifyEmailMutation,
 } from "../../redux/api/authApi";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/Slice/authSlice";
 
 function VerificationCode() {
   const [code, setCode] = useState(new Array(6).fill(""));
@@ -14,6 +16,7 @@ function VerificationCode() {
   const navigate = useNavigate();
   const inputRefs = useRef([]);
   const [resendCooldown, setResendCooldown] = useState(0); // seconds
+  const dispatch = useDispatch();
 
   // resend
   const [
@@ -65,14 +68,20 @@ function VerificationCode() {
     return () => clearInterval(t);
   }, [resendCooldown]);
 
-  // handle verify toast + token save
+  // handle verify toast + token save to Redux
   useEffect(() => {
     if (verifySuccess && verifyData) {
       const token = verifyData?.data; // 
       console.log("Received token:", token);
 
       if (token) {
-        localStorage.setItem("accessToken", token);
+        // Save token in Redux auth state
+        dispatch(
+          setUser({
+            user: {},
+            token,
+          })
+        );
         navigate("/reset-password");
       }
 
@@ -90,7 +99,7 @@ function VerificationCode() {
         text: verifyErr?.data?.message || "Invalid code. Please try again.",
       });
     }
-  }, [verifySuccess, verifyError, verifyErr, verifyData, navigate]);
+  }, [verifySuccess, verifyError, verifyErr, verifyData, navigate, dispatch]);
 
   const handleChange = (value, index) => {
     const digits = (value || "").replace(/\D/g, "");

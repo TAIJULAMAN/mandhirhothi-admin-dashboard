@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useResetPasswordMutation } from "../../redux/api/authApi";
 import { jwtDecode } from "jwt-decode"; 
+import { useSelector } from "react-redux";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -15,6 +16,7 @@ const ResetPassword = () => {
 
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const navigate = useNavigate();
+  const token = useSelector((state) => state?.auth?.token);
 
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
@@ -28,7 +30,6 @@ const ResetPassword = () => {
       return;
     }
 
-    const token = localStorage.getItem("accessToken");
     if (!token) {
       Swal.fire({
         icon: "error",
@@ -54,17 +55,10 @@ const ResetPassword = () => {
     const userId = decoded?.id;
 
     try {
-      await resetPassword(
-        {
-          userId,
-          password: newPassword,
-        },
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      ).unwrap();
+      await resetPassword({
+        userId,
+        password: newPassword,
+      }).unwrap();
 
       Swal.fire({
         icon: "success",
@@ -72,8 +66,6 @@ const ResetPassword = () => {
         text: "Your password has been successfully updated.",
       });
 
-      // ✅ remove token after reset
-      localStorage.removeItem("accessToken");
       navigate("/login");
     } catch (error) {
       Swal.fire({
