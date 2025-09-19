@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import TransactionTable from "./TransactionTable";
 import { useGetEarningsStatsQuery } from "../../redux/api/Earnings/statsApi";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { IoSearch } from "react-icons/io5";
 import Loader from "../../Components/Shared/Loaders/Loader";
+import useDebounce from "../../hooks/useDebounce";
 
 function EarningPage() {
   const { data, isLoading } = useGetEarningsStatsQuery();
@@ -11,6 +12,8 @@ function EarningPage() {
   console.log(isLoading);
 
   const earnings = data?.data || {};
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearch = useDebounce(searchTerm, 500);
 
   const cardData = [
     {
@@ -28,13 +31,11 @@ function EarningPage() {
   ];
 
   if (isLoading) {
-    return <Loader></Loader>
+    return <Loader></Loader>;
   }
 
   return (
     <div>
-
-
       <div className="flex items-center justify-between mb-5">
         <PageHeading title="Eargings" />
         <div className="flex gap-5 flex-col md:flex-row">
@@ -43,6 +44,8 @@ function EarningPage() {
               type="text"
               placeholder="Search..."
               className="border-2 border-[#00823b] py-3 pl-12 pr-[65px] outline-none w-full rounded-md"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <span className=" text-gray-400 absolute top-0 left-0 h-full px-5 flex items-center justify-center rounded-r-md cursor-pointer">
               <IoSearch className="text-[1.3rem]" />
@@ -51,10 +54,7 @@ function EarningPage() {
         </div>
       </div>
 
-
-
       <div className="flex items-center justify-between  p-10 ounded-xl bg-white shadow-lg rounded-xl mb-5">
-
         {cardData?.map((card, index) => (
           <div
             className={`w-full ${
@@ -79,7 +79,7 @@ function EarningPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-5 text-start">
           Last transactions history
         </h1>
-        <TransactionTable />
+        <TransactionTable search={debouncedSearch} />
       </div>
     </div>
   );

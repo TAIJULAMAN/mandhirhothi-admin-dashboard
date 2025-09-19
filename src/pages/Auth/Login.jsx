@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "antd/dist/reset.css";
 import { Link, useNavigate } from "react-router";
 import BrandLogo from "../../Components/Shared/BrandLogo";
@@ -11,6 +11,7 @@ import { setUser } from "../../redux/Slice/authSlice";
 import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import Loader from "../../Components/Shared/Loaders/Loader";
 import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,18 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [logIn, { isLoading, error }] = useLogInMutation();
+
+  // Load saved credentials if Remember Me was previously enabled
+  useEffect(() => {
+    const savedRemember = localStorage.getItem("rememberMe");
+    if (savedRemember === "true") {
+      setRememberMe(true);
+      const savedEmail = localStorage.getItem("rememberEmail") || "";
+      const savedPassword = localStorage.getItem("rememberPassword") || "";
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+    }
+  }, []);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -39,14 +52,44 @@ const Login = () => {
       console.log("Login response:", response);
 
       if (response?.success && response?.data?.accessToken) {
-        // console.log("Login successful:", response.data.accessToken);
-        localStorage.setItem("token", response?.data?.accessToken);
+        const token = response?.data?.accessToken;
+        // Decode and verify role before proceeding
+        let role = undefined;
+        try {
+          const decoded = jwtDecode(token);
+          role = decoded?.role;
+        } catch (err) {
+          console.error("Failed to decode token", err);
+        }
+
+        if (role !== "admin") {
+          Swal.fire({
+            icon: "error",
+            title: "Access Denied",
+            text: "Only admin can login.",
+          });
+          return; // Do not store token or navigate
+        }
+
+        // Proceed only for admin
+        // localStorage.setItem("token", token);
         dispatch(
           setUser({
             user: response?.data || {},
-            token: response?.data?.accessToken,
+            token,
           })
         );
+
+        // Persist or clear remembered credentials based on checkbox
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true");
+          localStorage.setItem("rememberEmail", email);
+          localStorage.setItem("rememberPassword", password);
+        } else {
+          localStorage.setItem("rememberMe", "false");
+          localStorage.removeItem("rememberEmail");
+          localStorage.removeItem("rememberPassword");
+        }
 
         Swal.fire({
           icon: "success",
@@ -108,9 +151,9 @@ const Login = () => {
                 className="absolute right-3 bottom-4 flex items-center text-gray-400"
               >
                 {showPassword ? (
-                  <IoEyeOffOutline className="w-5 h-5" />
-                ) : (
                   <IoEyeOutline className="w-5 h-5" />
+                ) : (
+                  <IoEyeOffOutline className="w-5 h-5" />
                 )}
               </button>
             </div>
@@ -122,7 +165,19 @@ const Login = () => {
                 type="checkbox"
                 className="hidden"
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setRememberMe(checked);
+                  localStorage.setItem("rememberMe", checked ? "true" : "false");
+                  if (checked) {
+                    // Save current inputs immediately for convenience
+                    localStorage.setItem("rememberEmail", email);
+                    localStorage.setItem("rememberPassword", password);
+                  } else {
+                    localStorage.removeItem("rememberEmail");
+                    localStorage.removeItem("rememberPassword");
+                  }
+                }}
               />
               {rememberMe ? (
                 <svg
