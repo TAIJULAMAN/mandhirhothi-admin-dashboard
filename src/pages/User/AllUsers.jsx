@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ConfigProvider, Modal, Table, Input, message } from "antd";
+import { ConfigProvider, Modal, Table, message } from "antd";
 import { MdBlockFlipped } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
-import { SearchOutlined } from "@ant-design/icons";
+
 import img from "../../assets/block.png";
+import useDebounce from "../../hooks/useDebounce";
 import {
   useChangeStatusMutation,
   useGetAllUserQuery,
@@ -13,13 +14,14 @@ import ErrorPage from "../../Components/Shared/Error/ErrorPage";
 import toast from "react-hot-toast";
 import { getImageUrl } from "../../config/envConfig";
 
-const AllUsers = ({search}) => {
+const AllUsers = ({ search }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [searchTerm, setSearchTerm] = useState(search || "");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     setSearchTerm(search);
@@ -30,7 +32,7 @@ const AllUsers = ({search}) => {
   const { data, isLoading, error } = useGetAllUserQuery({
     page,
     limit,
-    searchTerm: searchTerm,
+    searchTerm: debouncedSearchTerm,
   });
 
   const [
@@ -105,10 +107,6 @@ const AllUsers = ({search}) => {
         error?.data?.message || "An error occurred while updating user status"
       );
     }
-  };
-
-  const handleSearch = (value) => {
-    setSearchTerm(value);
   };
 
   const transformedUsers = users.map((user) => ({
