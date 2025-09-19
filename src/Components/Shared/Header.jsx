@@ -34,16 +34,18 @@ function Header({ toggleSidebar, isSidebarOpen }) {
   // console.log(isLoading, "Loading State");
 
   return (
-    <div className="px-5 md:px-10 h-16 flex justify-between items-center bg-white shadow">
+    <div className="px-5 py-10 md:px-10 h-16 flex justify-between items-center bg-white shadow">
       <div className="flex items-center gap-4">
-        <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
+       <Link to="/">
+       <img className="md:h-12 h-8" src="/logo.png" alt="logo image" />
+       </Link>
       </div>
 
       <div className="flex items-center gap-5">
         {/* Notifications */}
         <button
           onClick={showModal}
-          className="relative bg-[#cce9ff] md:p-[13px] p-[10px] rounded-full transition"
+          className="relative bg-[#cce9ff] md:p-[13px] p-[10px] rounded-full transition !hidden"
         >
           <IoIosNotificationsOutline className="size-6" />
           <span className="absolute top-1 right-1 bg-[#00823b] text-xs text-white px-1 rounded-full">
@@ -72,7 +74,7 @@ function Header({ toggleSidebar, isSidebarOpen }) {
         {/* Hamburger Button */}
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 md:hidden cursor-pointer"
+          className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 lg:hidden cursor-pointer"
         >
           {isSidebarOpen ? (
             <RxCross1 size={20} />

@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const PrivateRoute = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,13 +18,19 @@ const PrivateRoute = ({ children }) => {
           setIsAuthorized(true);
         } else {
           setIsAuthorized(false);
+          // Alert non-admin users
+          Swal.fire({
+            icon: "error",
+            title: "Access Denied",
+            text: "Only admin can login.",
+          });
         }
       } catch (error) {
         console.error("Invalid token", error);
       }
     }
     setIsLoading(false);
-  }, []);
+  }, [token]);
 
   if (isLoading) {
     return (

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getBaseUrl } from "../../config/envConfig";
 
@@ -7,8 +6,8 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl: getBaseUrl(),
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState()?.auth?.token;
       if (token) {
         headers.set("Authorization", token);
       }
@@ -34,4 +33,3 @@ export const baseApi = createApi({
     "auth",
   ],
 });
-

@@ -17,38 +17,46 @@ function DashboardHome() {
     {
       title: "Total Users",
       value: isLoading ? "Loading..." : stats.totalUser,
-      icon: <img src={user} alt="User Icon" className="md:block hidden" />,
+      iconSrc: user,
+      iconAlt: "User Icon",
     },
     {
       title: "Total Listings",
       value: isLoading ? "Loading..." : stats.totalListings,
-      icon: <img src={list} alt="List Icon" className="md:block hidden" />,
+      iconSrc: list,
+      iconAlt: "List Icon",
     },
     {
       title: "Subscription Revenue",
       value: isLoading ? "Loading..." : `$${stats.totalSubscriptionRevenue || 0}`,
-      icon: <img src={list} alt="Revenue Icon" className="md:block hidden"/>,
+      iconSrc: list,
+      iconAlt: "Revenue Icon",
     },
     {
       title: "Plate Revenue",
       value: isLoading ? "Loading..." : `$${stats.totalPlatePaymentRevenue || 0}`,
-      icon: <img src={list} alt="Revenue Icon" className="md:block hidden"/>,
+      iconSrc: list,
+      iconAlt: "Revenue Icon",
     },
   ];
 
   return (
     <div>
       {/* Card Section */}
-<div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-10 bg-white shadow-lg rounded-xl mb-5">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 p-4 md:p-6 bg-white shadow-lg rounded-xl mb-5">
   {cardData.map((card, index) => (
     <div
       key={index}
-      className="flex items-center justify-center gap-3 border-r-0 md:border-r-2 md:last:border-r-0 border-gray-300 p-4"
+      className="flex items-center justify-start gap-3 md:gap-4 border-r-0 md:border-r-2 md:last:border-r-0 border-gray-300 p-3 md:p-4"
     >
-      <h1>{card.icon}</h1>
-      <div>
-        <h1 className="text-xl md:text-3xl font-semibold">{card.title}</h1>
-        <h1 className="text-xl md:text-3xl font-semibold text-[#00823b]">
+      <img
+        src={card.iconSrc}
+        alt={card.iconAlt}
+        className="hidden lg:block w-8 h-8 lg:w-10 lg:h-10 object-contain flex-shrink-0"
+      />
+      <div className="min-w-0">
+        <h1 className="text-sm md:text-base lg:text-lg font-semibold text-gray-700 truncate">{card.title}</h1>
+        <h1 className="text-base sm:text-lg md:text-xl lg:text-3xl font-bold text-[#00823b] break-words whitespace-normal">
           {card.value}
         </h1>
       </div>
