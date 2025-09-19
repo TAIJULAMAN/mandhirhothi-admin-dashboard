@@ -37,10 +37,10 @@ const RecentlyJoinedUsers = () => {
     }));
   }, [data]);
 
-  const showModal = (user) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-  };
+  // const showModal = (user) => {
+  //   setSelectedUser(user);
+  //   setIsModalOpen(true);
+  // };
 
   const showModal2 = (user) => {
     setSelectedUser(user);
@@ -87,7 +87,7 @@ const RecentlyJoinedUsers = () => {
       key: "action",
       render: (_, record) => (
         <div className="flex gap-2">
-          <button
+          {/* <button
             onClick={() => showModal(record)}
             className={`border rounded-lg p-1 ${
               record.block
@@ -96,7 +96,7 @@ const RecentlyJoinedUsers = () => {
             }`}
           >
             <MdBlockFlipped className="w-8 h-8" />
-          </button>
+          </button> */}
           <button
             onClick={() => showModal2(record)}
             className="border border-[#00823b] rounded-lg p-1 bg-[#cce9ff] text-[#00823b]"

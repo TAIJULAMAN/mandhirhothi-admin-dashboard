@@ -1,21 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ConfigProvider, Modal, Table, Tag } from "antd";
 import { IoSearch } from "react-icons/io5";
 import PageHeading from "../../Components/Shared/PageHeading";
 import { useGetCurrentAllSubscribedMemberQuery } from "../../redux/api/subscriptionApi";
 import { getImageUrl } from "../../config/envConfig";
 import { FaRegEye } from "react-icons/fa";
+import useDebounce from "../../hooks/useDebounce";
 
 const AllUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // Fetch subscribed members
-  const { data, isLoading } = useGetCurrentAllSubscribedMemberQuery({
-    page,
-    limit: 10,
-  });
+  // Fetch subscribed members (server-side search + pagination)
+  const queryArgs = { page, limit: 10, searchTerm: debouncedSearchTerm };
+  const { data, isLoading, refetch } = useGetCurrentAllSubscribedMemberQuery(
+    queryArgs,
+    { refetchOnMountOrArgChange: true }
+  );
+  console.log("subscribers query args:", queryArgs);
+  console.log("subscribers data:", data);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    refetch();
+  }, [debouncedSearchTerm, page, refetch]);
 
   const subscribedMembers = data?.data?.all_subscribed_memeber || [];
   const total = data?.data?.meta?.total || 0;
@@ -80,6 +94,8 @@ const AllUsers = () => {
             type="text"
             placeholder="Search..."
             className="border-2 border-[#00823b] py-3 pl-12 pr-[65px] outline-none w-full rounded-md"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <span className="text-gray-400 absolute top-0 left-0 h-full px-5 flex items-center justify-center cursor-pointer">
             <IoSearch className="text-[1.3rem]" />
@@ -108,7 +124,7 @@ const AllUsers = () => {
           loading={isLoading}
           dataSource={subscribedMembers}
           columns={columns}
-          rowKey="id"
+          rowKey={(row) => row?._id || row?.id || `${row?.buyerId?._id}-${row?.subscriptionId?._id}`}
           scroll={{ x: "max-content" }}
           pagination={{
             pageSize: 10,

@@ -65,7 +65,7 @@ export default function CreateAdmin() {
             alt="Admin profile"
             className="w-12 h-12 object-cover rounded-full border-2 border-gray-200"
             onError={(e) => {
-              e.target.src = "https://via.placeholder.com/48x48?text=Admin";
+              e.target.src = "https://avatar.iran.liara.run/public/29";
             }}
           />
           <div>

@@ -30,14 +30,10 @@ const authApi = baseApi.injectEndpoints({
 
     resetPassword: builder.mutation({
       query: ({ userId, password }) => {
-        const token = localStorage.getItem("accessToken");
         return {
           url: "user/reset_password",
           method: "POST",
           body: { userId, password },
-          headers: {
-            Authorization: `${token}`,
-          },
         };
       },
       invalidatesTags: ["User"],
