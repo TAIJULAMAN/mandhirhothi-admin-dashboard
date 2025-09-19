@@ -111,7 +111,7 @@ const ResetPassword = () => {
                 onClick={() => setShowNewPassword(!showNewPassword)}
                 className="absolute right-3 bottom-3 text-gray-400"
               >
-                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                {showNewPassword ? <FaEye />:<FaEyeSlash /> }
               </button>
             </div>
           </div>
@@ -135,7 +135,7 @@ const ResetPassword = () => {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-3 bottom-3 text-gray-400"
               >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                {showConfirmPassword ?  <FaEye />:<FaEyeSlash /> }
               </button>
             </div>
           </div>

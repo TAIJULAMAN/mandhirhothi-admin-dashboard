@@ -18,9 +18,14 @@ export const subscriptionApi = baseApi.injectEndpoints({
       invalidatesTags: ["subscription"],
     }),
     getCurrentAllSubscribedMember: builder.query({
-      query: () => ({
+      query: ({ page = 1, limit = 10, searchTerm } = {}) => ({
         url: "current_subscribed_buyer/current_all_subscribed_member",
         method: "GET",
+        params: {
+          page,
+          limit,
+          ...(searchTerm ? { searchTerm } : {}),
+        },
       }),
       providesTags: ["subscription"],
     }),

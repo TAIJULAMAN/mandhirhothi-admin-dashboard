@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "antd/dist/reset.css";
 import { Link, useNavigate } from "react-router";
 import BrandLogo from "../../Components/Shared/BrandLogo";
@@ -20,6 +20,18 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [logIn, { isLoading, error }] = useLogInMutation();
+
+  // Load saved credentials if Remember Me was previously enabled
+  useEffect(() => {
+    const savedRemember = localStorage.getItem("rememberMe");
+    if (savedRemember === "true") {
+      setRememberMe(true);
+      const savedEmail = localStorage.getItem("rememberEmail") || "";
+      const savedPassword = localStorage.getItem("rememberPassword") || "";
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+    }
+  }, []);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -47,6 +59,17 @@ const Login = () => {
             token: response?.data?.accessToken,
           })
         );
+
+        // Persist or clear remembered credentials based on checkbox
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true");
+          localStorage.setItem("rememberEmail", email);
+          localStorage.setItem("rememberPassword", password);
+        } else {
+          localStorage.setItem("rememberMe", "false");
+          localStorage.removeItem("rememberEmail");
+          localStorage.removeItem("rememberPassword");
+        }
 
         Swal.fire({
           icon: "success",
@@ -108,9 +131,9 @@ const Login = () => {
                 className="absolute right-3 bottom-4 flex items-center text-gray-400"
               >
                 {showPassword ? (
-                  <IoEyeOffOutline className="w-5 h-5" />
-                ) : (
                   <IoEyeOutline className="w-5 h-5" />
+                ) : (
+                  <IoEyeOffOutline className="w-5 h-5" />
                 )}
               </button>
             </div>
@@ -122,7 +145,19 @@ const Login = () => {
                 type="checkbox"
                 className="hidden"
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setRememberMe(checked);
+                  localStorage.setItem("rememberMe", checked ? "true" : "false");
+                  if (checked) {
+                    // Save current inputs immediately for convenience
+                    localStorage.setItem("rememberEmail", email);
+                    localStorage.setItem("rememberPassword", password);
+                  } else {
+                    localStorage.removeItem("rememberEmail");
+                    localStorage.removeItem("rememberPassword");
+                  }
+                }}
               />
               {rememberMe ? (
                 <svg
