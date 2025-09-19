@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ConfigProvider, Modal, Table } from "antd";
-// import img from "../../assets/block.png";
 import { TbFileDownload } from "react-icons/tb";
 import { FaRegEye } from "react-icons/fa";
 import { useGetPlateSellPaymentsQuery } from "../../redux/api/Earnings/plateSellApi";
 import { getImageUrl } from "../../config/envConfig";
 
-const TransactionTable = () => {
+const TransactionTable = ({ search = "" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
+  const pageSize = 10;
 
-  const { data, isLoading } = useGetPlateSellPaymentsQuery({ page, limit: 10 });
-  console.log("data", data);
+  const queryArgs = { page, limit: pageSize, searchTerm: search };
+  const { data, isLoading, refetch } = useGetPlateSellPaymentsQuery(queryArgs, { refetchOnMountOrArgChange: true });
+  console.log("plateSell query args:", queryArgs);
+  console.log("plateSell data", data);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -23,16 +25,27 @@ const TransactionTable = () => {
     setIsModalOpen(true);
   };
 
-  const dataSource = data?.data?.all_payments?.map((item, index) => ({
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
+  // Ensure API includes the latest searchTerm and refetch on changes
+  useEffect(() => {
+    // Whenever search, page, or pageSize changes, make sure to refetch
+    // RTK Query should refetch on arg change, but we call refetch explicitly as requested
+    refetch();
+  }, [search, page, pageSize, refetch]);
+
+  const rows = (data?.data?.all_payments || []).map((item, idx) => ({
     key: item._id,
-    no: index + 1,
-    Buyer: `${item?.buyerId?.fastname || ""} ${item?.buyerId?.lastname || ""}`,
-    Seller: `${item?.sellerId?.fastname || ""} ${item?.sellerId?.lastname || ""}`,
+    no: (page - 1) * pageSize + idx + 1,
+    Buyer: `${item?.buyerId?.fastname || ""} ${item?.buyerId?.lastname || ""}`.trim(),
+    Seller: `${item?.sellerId?.fastname || ""} ${item?.sellerId?.lastname || ""}`.trim(),
     date: new Date(item.createdAt).toLocaleDateString(),
     amount: item.price,
     Trx_ID: item._id,
     Plate: item.platesalesId?.registrationId,
-    raw: item, // keep full record for modal
+    raw: item,
   }));
 
   const columns = [
@@ -110,11 +123,11 @@ const TransactionTable = () => {
       key: "action",
       render: (_, record) => (
         <div className="flex gap-2">
-          <button
+          {/* <button
             className="border border-[#00823b] rounded-lg p-1 bg-[#cce9ff] text-[#00823b]"
           >
             <TbFileDownload className="w-8 h-8 text-[#00823b]" />
-          </button>
+          </button> */}
           <button
             onClick={() => showModal(record.raw)}
             className="border border-[#00823b] rounded-lg p-1 bg-[#cce9ff] text-[#00823b]"
@@ -144,10 +157,10 @@ const TransactionTable = () => {
         }}
       >
         <Table
-          dataSource={dataSource}
+          dataSource={rows}
           columns={columns}
           pagination={{
-            pageSize: 10,
+            pageSize,
             total: data?.data?.meta?.total || 0,
             current: page,
             showSizeChanger: false,
